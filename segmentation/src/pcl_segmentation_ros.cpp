@@ -12,12 +12,6 @@
 #include <v4r/common/pcl_opencv.h>
 #include <v4r/io/filesystem.h>
 
-#include <boost/any.hpp>
-#include <boost/program_options.hpp>
-#include <glog/logging.h>
-
-namespace po = boost::program_options;
-
 namespace v4r
 {
 
@@ -51,14 +45,15 @@ SegmenterROS<PointT>::respondSrvCall(segmentation_srv_definitions::segment::Requ
     for( PointT &p : colored_cloud->points)
         p.r = p.g = p.b = 0.f;
 
-    for(size_t i=0; i < found_clusters_.size(); i++)
+    for(const pcl::PointIndices &indices : found_clusters_)
     {
-        const pcl::PointIndices &indices = found_clusters_[i];
         const uint8_t r = rand()%255;
         const uint8_t g = rand()%255;
         const uint8_t b = rand()%255;
 
         std_msgs::Int32MultiArray indx;
+        indx.data.reserve( indices.indices.size() );
+
         for( int idx : indices.indices )
         {
             PointT &p1 = colored_cloud->points[idx];
@@ -118,12 +113,12 @@ SegmenterROS<PointT>::initialize (int argc, char ** argv)
     std::cout << "Ready to get service calls..." << std::endl;
     ros::spin ();
 }
+
 }
 
 int
 main (int argc, char ** argv)
 {
-    /* initialize random seed: */
     srand (time(NULL));
     v4r::SegmenterROS<pcl::PointXYZRGB> s;
     s.initialize(argc, argv);

@@ -1,35 +1,10 @@
 #include "recognizer_ros.h"
 #include <pcl_conversions/pcl_conversions.h>
 #include <cv_bridge/cv_bridge.h>
-
-#include <v4r/common/camera.h>
-#include <v4r/common/miscellaneous.h>
-#include <v4r/common/normals.h>
 #include <v4r/common/pcl_opencv.h>
-#include <v4r/io/filesystem.h>
-#include <v4r/features/esf_estimator.h>
-#include <v4r/features/shot_local_estimator.h>
-#include <v4r/features/sift_local_estimator.h>
-#include <v4r/keypoints/uniform_sampling_extractor.h>
-#include <v4r/ml/nearestNeighbor.h>
-#include <v4r/ml/svmWrapper.h>
-#include <v4r/recognition/local_recognition_pipeline.h>
-#include <v4r/recognition/global_recognition_pipeline.h>
-#include <v4r/segmentation/all_headers.h>
-
-#include <pcl/common/time.h>
-#include <pcl/recognition/cg/geometric_consistency.h>
-#include <pcl/features/integral_image_normal.h>
-#include <pcl/filters/passthrough.h>
-#include <pcl/visualization/pcl_visualizer.h>
 
 #include <iostream>
 #include <sstream>
-
-#include <boost/format.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/program_options.hpp>
-#include <glog/logging.h>
 
 namespace po = boost::program_options;
 
