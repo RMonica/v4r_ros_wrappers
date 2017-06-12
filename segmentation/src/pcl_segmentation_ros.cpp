@@ -11,7 +11,7 @@
 #include <v4r/common/miscellaneous.h>
 #include <v4r/common/normals.h>
 #include <v4r/common/pcl_opencv.h>
-#include <v4r/common/plane_utils.h>
+#include <v4r/segmentation/plane_utils.h>
 #include <v4r/io/filesystem.h>
 
 namespace v4r
