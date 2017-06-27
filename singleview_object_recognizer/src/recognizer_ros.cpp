@@ -60,7 +60,7 @@ RecognizerROS<PointT>::respondSrvCall(recognition_srv_definitions::recognize::Re
             tt.rotation.w = q.w();
             response.transforms.push_back(tt);
 
-            typename pcl::PointCloud<PointT>::ConstPtr model_cloud = mrec_.getModel( oh->model_id_, 5 );
+            typename pcl::PointCloud<PointT>::ConstPtr model_cloud = mrec_->getModel( oh->model_id_, 5 );
             typename pcl::PointCloud<PointT>::Ptr model_aligned (new pcl::PointCloud<PointT>);
             pcl::transformPointCloud (*model_cloud, *model_aligned, oh->transform_);
             *pRecognizedModels += *model_aligned;
@@ -170,7 +170,7 @@ RecognizerROS<PointT>::recognizeROS(recognition_srv_definitions::recognize::Requ
 {
     scene_.reset(new pcl::PointCloud<PointT>());
     pcl::fromROSMsg (req.cloud, *scene_);
-    object_hypotheses_ = mrec_.recognize( scene_ );
+    object_hypotheses_ = mrec_->recognize( scene_ );
 
     for(size_t ohg_id=0; ohg_id<object_hypotheses_.size(); ohg_id++)
     {
@@ -211,42 +211,42 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
             return false;
         }
 
-        std::string hv_config_xml;
-        if( n_->getParam ( "hv_config_xml", hv_config_xml ) )
-        {
-            arguments.push_back("--hv_config_xml");
-            arguments.push_back(hv_config_xml);
-        }
-        std::string sift_config_xml;
-        if( n_->getParam ( "sift_config_xml", sift_config_xml ) )
-        {
-            arguments.push_back("--sift_config_xml");
-            arguments.push_back(sift_config_xml);
-        }
-        std::string shot_config_xml;
-        if( n_->getParam ( "shot_config_xml", shot_config_xml ) )
-        {
-            arguments.push_back("--shot_config_xml");
-            arguments.push_back(shot_config_xml);
-        }
-        std::string esf_config_xml;
-        if( n_->getParam ( "esf_config_xml", esf_config_xml ) )
-        {
-            arguments.push_back("--esf_config_xml");
-            arguments.push_back(esf_config_xml);
-        }
-        std::string alexnet_config_xml;
-        if( n_->getParam ( "alexnet_config_xml", alexnet_config_xml ) )
-        {
-            arguments.push_back("--alexnet_config_xml");
-            arguments.push_back(alexnet_config_xml);
-        }
-        std::string camera_xml;
-        if( n_->getParam ( "camera_xml", camera_xml ) )
-        {
-            arguments.push_back("--camera_xml");
-            arguments.push_back(camera_xml);
-        }
+//        std::string hv_config_xml;
+//        if( n_->getParam ( "hv_config_xml", hv_config_xml ) )
+//        {
+//            arguments.push_back("--hv_config_xml");
+//            arguments.push_back(hv_config_xml);
+//        }
+//        std::string sift_config_xml;
+//        if( n_->getParam ( "sift_config_xml", sift_config_xml ) )
+//        {
+//            arguments.push_back("--sift_config_xml");
+//            arguments.push_back(sift_config_xml);
+//        }
+//        std::string shot_config_xml;
+//        if( n_->getParam ( "shot_config_xml", shot_config_xml ) )
+//        {
+//            arguments.push_back("--shot_config_xml");
+//            arguments.push_back(shot_config_xml);
+//        }
+//        std::string esf_config_xml;
+//        if( n_->getParam ( "esf_config_xml", esf_config_xml ) )
+//        {
+//            arguments.push_back("--esf_config_xml");
+//            arguments.push_back(esf_config_xml);
+//        }
+//        std::string alexnet_config_xml;
+//        if( n_->getParam ( "alexnet_config_xml", alexnet_config_xml ) )
+//        {
+//            arguments.push_back("--alexnet_config_xml");
+//            arguments.push_back(alexnet_config_xml);
+//        }
+//        std::string camera_xml;
+//        if( n_->getParam ( "camera_xml", camera_xml ) )
+//        {
+//            arguments.push_back("--camera_xml");
+//            arguments.push_back(camera_xml);
+//        }
         std::string additional_arguments;
         if( n_->getParam ( "arg", additional_arguments ) )
         {
@@ -261,7 +261,9 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
         std::cout << arg << " ";
     std::cout << std::endl;
 
-    mrec_.initialize(arguments);
+    mrec_param_.load("cfg/multipipeline_config.xml");
+    mrec_.reset(new v4r::apps::ObjectRecognizer<PointT>(mrec_param_));
+    mrec_->initialize(arguments);
 
     ROS_INFO("Ready to get service calls.");
 
