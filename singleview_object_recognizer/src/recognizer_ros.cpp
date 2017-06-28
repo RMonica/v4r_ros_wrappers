@@ -42,6 +42,9 @@ RecognizerROS<PointT>::respondSrvCall(recognition_srv_definitions::recognize::Re
     {
         for(const v4r::ObjectHypothesis::Ptr &oh : object_hypotheses_[ohg_id].ohs_)
         {
+            if( ! oh->is_verified_ )
+                continue;
+
             std_msgs::String ss_tmp;
             ss_tmp.data = oh->model_id_;
             response.ids.push_back(ss_tmp);
