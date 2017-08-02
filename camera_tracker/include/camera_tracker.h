@@ -25,13 +25,13 @@
  ******************************************************************************/
 
 
-#include "camera_srv_definitions/start_tracker.h"
-#include "camera_srv_definitions/stop_tracker.h"
-#include "camera_srv_definitions/visualize_compound.h"
-#include "camera_srv_definitions/get_tracking_results.h"
-#include "camera_srv_definitions/save_tracking_results_to_file.h"
-#include "camera_srv_definitions/do_ba.h"
-#include "camera_srv_definitions/cleanup.h"
+#include "camera_tracker_srvs/start_tracker.h"
+#include "camera_tracker_srvs/stop_tracker.h"
+#include "camera_tracker_srvs/visualize_compound.h"
+#include "camera_tracker_srvs/get_tracking_results.h"
+#include "camera_tracker_srvs/save_tracking_results_to_file.h"
+#include "camera_tracker_srvs/do_ba.h"
+#include "camera_tracker_srvs/cleanup.h"
 
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -130,8 +130,8 @@ private:
     cleanup ();
 
     bool
-    cleanup (camera_srv_definitions::cleanup::Request & req,
-             camera_srv_definitions::cleanup::Response & response)
+    cleanup (camera_tracker_srvs::cleanup::Request & req,
+             camera_tracker_srvs::cleanup::Response & response)
     {
         (void)req;
         (void)response;
@@ -140,36 +140,36 @@ private:
 
 
     bool
-    start (camera_srv_definitions::start_tracker::Request & req,
-           camera_srv_definitions::start_tracker::Response & response);
+    start (camera_tracker_srvs::start_tracker::Request & req,
+           camera_tracker_srvs::start_tracker::Response & response);
 
 
     bool
-    stop (camera_srv_definitions::start_tracker::Request & req,
-          camera_srv_definitions::start_tracker::Response & response);
+    stop (camera_tracker_srvs::start_tracker::Request & req,
+          camera_tracker_srvs::start_tracker::Response & response);
 
 
     void createObjectCloudFiltered(pcl::PointCloud<pcl::PointXYZRGB>::Ptr & octree_cloud);
 
 
     bool
-    doBA (camera_srv_definitions::do_ba::Request & req,
-          camera_srv_definitions::do_ba::Response & response);
+    doBA (camera_tracker_srvs::do_ba::Request & req,
+          camera_tracker_srvs::do_ba::Response & response);
 
 
     bool
-    getTrackingResults (camera_srv_definitions::get_tracking_results::Request & req,
-                        camera_srv_definitions::get_tracking_results::Response & response);
+    getTrackingResults (camera_tracker_srvs::get_tracking_results::Request & req,
+                        camera_tracker_srvs::get_tracking_results::Response & response);
 
 
     bool
-    saveTrackingResultsToFile(camera_srv_definitions::save_tracking_results_to_file::Request &req,
-                              camera_srv_definitions::save_tracking_results_to_file::Response &response);
+    saveTrackingResultsToFile(camera_tracker_srvs::save_tracking_results_to_file::Request &req,
+                              camera_tracker_srvs::save_tracking_results_to_file::Response &response);
 
 
     bool
-    visCompound (camera_srv_definitions::visualize_compound::Request & req,
-                 camera_srv_definitions::visualize_compound::Response & response);
+    visCompound (camera_tracker_srvs::visualize_compound::Request & req,
+                 camera_tracker_srvs::visualize_compound::Response & response);
 
 
 

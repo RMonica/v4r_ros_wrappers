@@ -14,7 +14,7 @@
 #include <std_msgs/String.h>
 
 #include <v4r/io/filesystem.h>
-#include "segmentation_srv_definitions/segment.h"
+#include "segmentation_srvs/segment.h"
 #include <cv_bridge/cv_bridge.h>
 #include <v4r/attention_segmentation/EPUtils.h>
 
@@ -41,7 +41,7 @@ public:
     void callUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
         std::cout << "Received point cloud.\n" << std::endl;
-        segmentation_srv_definitions::segment srv;
+        segmentation_srvs::segment srv;
         srv.request.cloud = *msg;
 
         if (srv_client.call(srv))
@@ -75,7 +75,7 @@ public:
         return KINECT_OK_;
     }
 
-    void visualizePointcloud(const segmentation_srv_definitions::segment& srv)
+    void visualizePointcloud(const segmentation_srvs::segment& srv)
     {
           std::cout << "Going to show " << srv.response.clusters_indices.size() << " object(s)" << std::endl;
 
@@ -130,7 +130,7 @@ public:
             pcl::io::loadPCDFile(directory_ + "/" + test_cloud[i], cloud);
             sensor_msgs::PointCloud2 cloud_ros;
             pcl::toROSMsg(cloud, cloud_ros);
-            segmentation_srv_definitions::segment srv;
+            segmentation_srvs::segment srv;
             srv.request.cloud = cloud_ros;
             if (!srv_client.call(srv))
             {
@@ -158,7 +158,7 @@ public:
         SegmentationPub_ = n_->advertise<sensor_msgs::Image>("/object_gestalt_segmentation_visualization", 1000, true);
 
         std::string service_name_sv_rec = "/object_gestalt_segmentation";
-        srv_client = n_->serviceClient<segmentation_srv_definitions::segment>(service_name_sv_rec);
+        srv_client = n_->serviceClient<segmentation_srvs::segment>(service_name_sv_rec);
 
         n_->getParam ( "input_method", input_method_ );
 

@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(incremental_object_learning)
 
-find_package(catkin REQUIRED COMPONENTS roscpp rospy incremental_object_learning_srv_definitions cv_bridge sensor_msgs image_transport)
+find_package(catkin REQUIRED COMPONENTS roscpp rospy incremental_object_learning_srvs cv_bridge sensor_msgs image_transport)
 
 find_package(PCL REQUIRED)
 find_package(OpenCV REQUIRED )
 find_package(V4R REQUIRED)
 
-catkin_package( CATKIN_DEPENDS roscpp rospy tf incremental_object_learning_srv_definitions )
+catkin_package( CATKIN_DEPENDS roscpp rospy tf incremental_object_learning_srvs )
 
 include_directories(include
   ${PCL_INCLUDE_DIRS}
@@ -16,6 +16,7 @@ include_directories(include
   ${OpenCV_INCLUDE_DIRS}
 )
 
+link_directories(${V4R_3RDPARTY_LIB_DIR_OPT})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_definitions(${PCL_DEFINITIONS})
 

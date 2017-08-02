@@ -9,7 +9,7 @@
 #include <object_gestalt_segmentation/object_gestalt_segmentation.h>
   
 bool
-SegmenterComplete::segment (segmentation_srv_definitions::segment::Request & req, segmentation_srv_definitions::segment::Response & response)
+SegmenterComplete::segment (segmentation_srvs::segment::Request & req, segmentation_srvs::segment::Response & response)
 {
   //get point cloud
   pcl::PointCloud<PointT>::Ptr scene (new pcl::PointCloud<PointT>);

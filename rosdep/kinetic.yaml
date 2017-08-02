@@ -1,0 +1,46 @@
+# V4R library
+
+v4r:
+  ubuntu: v4r
+
+# V4R ROS wrappers and msg/srv/action definitions
+
+camera_tracker_srvs:
+  ubuntu: ros-kinetic-camera-tracker-srvs
+classifier_srvs:
+  ubuntu: ros-kinetic-classifier-srvs
+incremental_object_learning_srvs:
+  ubuntu: ros-kinetic-incremental-object-learning-srvs
+object_tracker_srvs:
+  ubuntu: ros-kinetic-object-tracker-srvs
+recognition_srvs:
+  ubuntu: ros-kinetic-recognition-srvs
+segmentation_srvs:
+  ubuntu: ros-kinetic-segmentation-srvs
+object_perception_msgs:
+  ubuntu: ros-kinetic-object-perception-msgs
+camera_tracker:
+  ubuntu: ros-kinetic-camera-tracker
+incremental_object_learning:
+  ubuntu: ros-kinetic-incremental-object-learning
+multiview_object_recognizer:
+  ubuntu: ros-kinetic-multiview-object-recognizer
+object_classifier:
+  ubuntu: ros-kinetic-object-classifier
+object_detection_and_tracking:
+  ubuntu: ros-kinetic-object-detection-and-tracking
+object_gestalt_segmentation:
+  ubuntu: ros-kinetic-object-gestalt-segmentation
+object_tracker:
+  ubuntu: ros-kinetic-object-tracker
+segment_and_classify:
+  ubuntu: ros-kinetic-segment-and-classify
+segmentation:
+  ubuntu: ros-kinetic-segmentation
+singleview_object_recognizer:
+  ubuntu: ros-kinetic-singleview-object-recognizer
+temporal_filtering:
+  ubuntu: ros-kinetic-temporal-filtering
+v4r_ros_wrappers:
+  ubuntu: ros-kinetic-v4r-ros-wrappers
+

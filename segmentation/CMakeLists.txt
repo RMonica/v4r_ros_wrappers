@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(segmentation)
-find_package(catkin REQUIRED COMPONENTS roscpp rospy segmentation_srv_definitions
+find_package(catkin REQUIRED COMPONENTS roscpp rospy segmentation_srvs
                                         cv_bridge sensor_msgs image_transport pcl_conversions
 )
 find_package(PCL REQUIRED)
@@ -9,7 +9,7 @@ find_package(OpenCV REQUIRED )
 
 catkin_package(
    INCLUDE_DIRS include
-   CATKIN_DEPENDS roscpp rospy segmentation_srv_definitions
+   CATKIN_DEPENDS roscpp rospy segmentation_srvs
                                         cv_bridge sensor_msgs image_transport pcl_conversions
    )
    
@@ -21,6 +21,7 @@ include_directories(include
   ${OpenCV_INCLUDE_DIRS}
 )
 set(incs include/pcl_segmentation_ros.h)
+link_directories(${V4R_3RDPARTY_LIB_DIR_OPT})
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")

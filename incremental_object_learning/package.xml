@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>incremental_object_learning</name>
-  <version>0.1.4</version>
+  <version>0.1.5</version>
   <description>The dynamic_object_learning package</description>
 
   <maintainer email="faeulhammer@acin.tuwien.ac.at">Thomas Faeulhammer</maintainer>
@@ -12,7 +12,7 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>tf</build_depend>
-  <build_depend>incremental_object_learning_srv_definitions</build_depend>
+  <build_depend>incremental_object_learning_srvs</build_depend>
   <build_depend>cv_bridge</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>image_transport</build_depend>
@@ -22,7 +22,7 @@
   <run_depend>roscpp</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>tf</run_depend>
-  <run_depend>incremental_object_learning_srv_definitions</run_depend>
+  <run_depend>incremental_object_learning_srvs</run_depend>
   <run_depend>cv_bridge</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>image_transport</run_depend>

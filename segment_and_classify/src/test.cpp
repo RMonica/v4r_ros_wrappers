@@ -14,8 +14,8 @@
 #include <std_msgs/String.h>
 
 #include <v4r/io/filesystem.h>
-#include "segmentation_srv_definitions/segment.h"
-#include "classifier_srv_definitions/classify.h"
+#include "segmentation_srvs/segment.h"
+#include "classifier_srvs/classify.h"
 
 class SegmenationAndClassifyDemo
 {
@@ -39,14 +39,14 @@ public:
     callUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
         std::cout << "Received point cloud.\n" << std::endl;
-        segmentation_srv_definitions::segment srv_seg;
+        segmentation_srvs::segment srv_seg;
         srv_seg.request.cloud = *msg;
 
         if (!srv_client_seg.call(srv_seg))
             std::cerr << "Error calling segmentation service!" << std::endl;
         else
         {
-            classifier_srv_definitions::classify srv_classify;
+            classifier_srvs::classify srv_classify;
             srv_classify.request.cloud = srv_seg.request.cloud;
             srv_classify.request.clusters_indices = srv_seg.response.clusters_indices;
 
@@ -85,7 +85,7 @@ public:
             pcl::io::loadPCDFile(directory_ + "/" + test_cloud[i], cloud);
             sensor_msgs::PointCloud2 cloud_ros;
             pcl::toROSMsg(cloud, cloud_ros);
-            segmentation_srv_definitions::segment srv_seg;
+            segmentation_srvs::segment srv_seg;
             srv_seg.request.cloud = cloud_ros;
 
             if (!srv_client_seg.call(srv_seg))
@@ -95,7 +95,7 @@ public:
             }
             else
             {
-                classifier_srv_definitions::classify srv_classify;
+                classifier_srvs::classify srv_classify;
                 srv_classify.request.cloud = srv_seg.request.cloud;
                 srv_classify.request.clusters_indices = srv_seg.response.clusters_indices;
 
@@ -116,8 +116,8 @@ public:
 
         std::string service_name_seg = "/pcl_segmentation_service/pcl_segmentation";
         std::string service_name_classify = "/classifier_service/classify";
-        srv_client_seg = n_->serviceClient<segmentation_srv_definitions::segment>(service_name_seg);
-        srv_client_classify = n_->serviceClient<classifier_srv_definitions::classify>(service_name_classify);
+        srv_client_seg = n_->serviceClient<segmentation_srvs::segment>(service_name_seg);
+        srv_client_classify = n_->serviceClient<classifier_srvs::classify>(service_name_classify);
 
         n_->getParam ( "input_method", input_method_ );
 

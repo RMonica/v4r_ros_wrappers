@@ -5,9 +5,9 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
   object_tracker
-  object_tracker_srv_definitions
+  object_tracker_srvs
   pcl_conversions
-  recognition_srv_definitions
+  recognition_srvs
   roscpp
   rospy
   sensor_msgs

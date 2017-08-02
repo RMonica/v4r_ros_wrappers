@@ -25,10 +25,10 @@
  ******************************************************************************/
 
 
-#include "object_tracker_srv_definitions/start_tracker.h"
-#include "object_tracker_srv_definitions/stop_tracker.h"
-#include "object_tracker_srv_definitions/cleanup.h"
-#include "object_tracker_srv_definitions/change_tracking_model.h"
+#include "object_tracker_srvs/start_tracker.h"
+#include "object_tracker_srvs/stop_tracker.h"
+#include "object_tracker_srvs/cleanup.h"
+#include "object_tracker_srvs/change_tracking_model.h"
 
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -110,17 +110,17 @@ private:
     drawConfidenceBar(cv::Mat &im, const double &conf) const;
 
     bool
-    start (object_tracker_srv_definitions::start_tracker::Request & req,
-           object_tracker_srv_definitions::start_tracker::Response & response);
+    start (object_tracker_srvs::start_tracker::Request & req,
+           object_tracker_srvs::start_tracker::Response & response);
 
 
     bool
-    stop (object_tracker_srv_definitions::stop_tracker::Request & req,
-          object_tracker_srv_definitions::stop_tracker::Response & response);
+    stop (object_tracker_srvs::stop_tracker::Request & req,
+          object_tracker_srvs::stop_tracker::Response & response);
 
     bool
-    cleanup (object_tracker_srv_definitions::cleanup::Request & req,
-             object_tracker_srv_definitions::cleanup::Response & response)
+    cleanup (object_tracker_srvs::cleanup::Request & req,
+             object_tracker_srvs::cleanup::Response & response)
     {
         (void)req;
         (void)response;
@@ -129,8 +129,8 @@ private:
 
 
     bool
-    changeTrackingModel (object_tracker_srv_definitions::change_tracking_model::Request & req,
-                           object_tracker_srv_definitions::change_tracking_model::Response & response);
+    changeTrackingModel (object_tracker_srvs::change_tracking_model::Request & req,
+                           object_tracker_srvs::change_tracking_model::Response & response);
 
     void
     cleanup()

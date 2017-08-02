@@ -14,7 +14,7 @@
 #include <std_msgs/String.h>
 
 #include <v4r/io/filesystem.h>
-#include "segmentation_srv_definitions/segment.h"
+#include "segmentation_srvs/segment.h"
 
 class SegmenationDemo
 {
@@ -36,7 +36,7 @@ public:
     void callUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
         std::cout << "Received point cloud.\n" << std::endl;
-        segmentation_srv_definitions::segment srv;
+        segmentation_srvs::segment srv;
         srv.request.cloud = *msg;
 
         if (srv_client.call(srv))
@@ -75,7 +75,7 @@ public:
             pcl::io::loadPCDFile(directory_ + "/" + test_cloud[i], cloud);
             sensor_msgs::PointCloud2 cloud_ros;
             pcl::toROSMsg(cloud, cloud_ros);
-            segmentation_srv_definitions::segment srv;
+            segmentation_srvs::segment srv;
             srv.request.cloud = cloud_ros;
 
             if (!srv_client.call(srv))
@@ -96,7 +96,7 @@ public:
         n_ = new ros::NodeHandle ( "~" );
 
         std::string service_name_sv_rec = "/pcl_segmentation_service/pcl_segmentation";
-        srv_client = n_->serviceClient<segmentation_srv_definitions::segment>(service_name_sv_rec);
+        srv_client = n_->serviceClient<segmentation_srvs::segment>(service_name_sv_rec);
 
         n_->getParam ( "input_method", input_method_ );
 

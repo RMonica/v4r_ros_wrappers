@@ -14,39 +14,39 @@ namespace object_modelling
 
 
 bool
-IOL_ROS::clear_cached_model (incremental_object_learning_srv_definitions::clear::Request & req,
-                 incremental_object_learning_srv_definitions::clear::Response & response)
+IOL_ROS::clear_cached_model (incremental_object_learning_srvs::clear::Request & req,
+                 incremental_object_learning_srvs::clear::Response & response)
 {
     clear();
     return true;
 }
 
 bool
-IOL_ROS::save_model (incremental_object_learning_srv_definitions::save_model::Request & req,
-                 incremental_object_learning_srv_definitions::save_model::Response & response)
+IOL_ROS::save_model (incremental_object_learning_srvs::save_model::Request & req,
+                 incremental_object_learning_srvs::save_model::Response & response)
 {
     bool save_views = true;
     return IOL::save_model(req.models_folder.data, req.object_name.data, save_views);
 }
 
 bool
-IOL_ROS::visualizeROS(incremental_object_learning_srv_definitions::visualize::Request & req,
-                    incremental_object_learning_srv_definitions::visualize::Response & response)
+IOL_ROS::visualizeROS(incremental_object_learning_srvs::visualize::Request & req,
+                    incremental_object_learning_srvs::visualize::Response & response)
 {
     visualize();
     return true;
 }
 
 bool
-IOL_ROS::learn_object (incremental_object_learning_srv_definitions::learn_object::Request & req,
-                   incremental_object_learning_srv_definitions::learn_object::Response & response)
+IOL_ROS::learn_object (incremental_object_learning_srvs::learn_object::Request & req,
+                   incremental_object_learning_srvs::learn_object::Response & response)
 {
     bool ok = true;
     assert(req.keyframes.size() == req.transforms.size());
 
     for (size_t i=0; i<req.keyframes.size(); i++)
     {
-        incremental_object_learning_srv_definitions::learn_object_inc srv_learn_inc;
+        incremental_object_learning_srvs::learn_object_inc srv_learn_inc;
         srv_learn_inc.request.cloud = req.keyframes[i];
         srv_learn_inc.request.transform = req.transforms[i];
 
@@ -65,8 +65,8 @@ IOL_ROS::learn_object (incremental_object_learning_srv_definitions::learn_object
 }
 
 
-bool IOL_ROS::learn_object_inc (incremental_object_learning_srv_definitions::learn_object_inc::Request & req,
-                       incremental_object_learning_srv_definitions::learn_object_inc::Response & response)
+bool IOL_ROS::learn_object_inc (incremental_object_learning_srvs::learn_object_inc::Request & req,
+                       incremental_object_learning_srvs::learn_object_inc::Response & response)
 {
     pcl::PointCloud<PointT> cloud;
     pcl::fromROSMsg(req.cloud, cloud);

@@ -12,9 +12,9 @@
 #include "sensor_msgs/PointCloud2.h"
 #include "std_msgs/String.h"
 #include "std_msgs/Int32MultiArray.h"
-#include "classifier_srv_definitions/segment_and_classify.h"
-#include "classifier_srv_definitions/classify.h"
-#include "segmentation_srv_definitions/segment.h"
+#include "classifier_srvs/segment_and_classify.h"
+#include "classifier_srvs/classify.h"
+#include "segmentation_srvs/segment.h"
 #include "object_perception_msgs/classification.h"
 #include "geometry_msgs/Point32.h"
 
@@ -70,8 +70,8 @@ private:
 
     bool callSegService(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
-        ros::ServiceClient segmentation_client = n_->serviceClient<segmentation_srv_definitions::segment>("/object_segmenter_service/object_segmenter");
-        segmentation_srv_definitions::segment seg_srv;
+        ros::ServiceClient segmentation_client = n_->serviceClient<segmentation_srvs::segment>("/object_segmenter_service/object_segmenter");
+        segmentation_srvs::segment seg_srv;
         seg_srv.request.cloud = *msg;
 
         if (segmentation_client.call(seg_srv))
@@ -89,8 +89,8 @@ private:
 
     bool callClassifierService(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
-        ros::ServiceClient classifierClient = n_->serviceClient<classifier_srv_definitions::classify>("/classifier_service/classify");
-        classifier_srv_definitions::classify srv;
+        ros::ServiceClient classifierClient = n_->serviceClient<classifier_srvs::classify>("/classifier_service/classify");
+        classifier_srvs::classify srv;
         srv.request.cloud = *msg;
         srv.request.clusters_indices = cluster_indices_ros_;
         if (classifierClient.call(srv))
@@ -109,8 +109,8 @@ private:
 
     bool callSegAndClassifierService(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
-        ros::ServiceClient segAndClassifierClient = n_->serviceClient<classifier_srv_definitions::segment_and_classify>("/classifier_service/segment_and_classify");
-        classifier_srv_definitions::segment_and_classify srv;
+        ros::ServiceClient segAndClassifierClient = n_->serviceClient<classifier_srvs::segment_and_classify>("/classifier_service/segment_and_classify");
+        classifier_srvs::segment_and_classify srv;
         srv.request.cloud = *msg;
         if (segAndClassifierClient.call(srv))
         {

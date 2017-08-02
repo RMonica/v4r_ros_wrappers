@@ -1,0 +1,46 @@
+# V4R library
+
+v4r:
+  ubuntu: v4r
+
+# V4R ROS wrappers and msg/srv/action definitions
+
+camera_tracker_srvs:
+  ubuntu: ros-indigo-camera-tracker-srvs
+classifier_srvs:
+  ubuntu: ros-indigo-classifier-srvs
+incremental_object_learning_srvs:
+  ubuntu: ros-indigo-incremental-object-learning-srvs
+object_tracker_srvs:
+  ubuntu: ros-indigo-object-tracker-srvs
+recognition_srvs:
+  ubuntu: ros-indigo-recognition-srvs
+segmentation_srvs:
+  ubuntu: ros-indigo-segmentation-srvs
+object_perception_msgs:
+  ubuntu: ros-indigo-object-perception-msgs
+camera_tracker:
+  ubuntu: ros-indigo-camera-tracker
+incremental_object_learning:
+  ubuntu: ros-indigo-incremental-object-learning
+multiview_object_recognizer:
+  ubuntu: ros-indigo-multiview-object-recognizer
+object_classifier:
+  ubuntu: ros-indigo-object-classifier
+object_detection_and_tracking:
+  ubuntu: ros-indigo-object-detection-and-tracking
+object_gestalt_segmentation:
+  ubuntu: ros-indigo-object-gestalt-segmentation
+object_tracker:
+  ubuntu: ros-indigo-object-tracker
+segment_and_classify:
+  ubuntu: ros-indigo-segment-and-classify
+segmentation:
+  ubuntu: ros-indigo-segmentation
+singleview_object_recognizer:
+  ubuntu: ros-indigo-singleview-object-recognizer
+temporal_filtering:
+  ubuntu: ros-indigo-temporal-filtering
+v4r_ros_wrappers:
+  ubuntu: ros-indigo-v4r-ros-wrappers
+

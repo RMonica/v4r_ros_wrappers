@@ -17,12 +17,12 @@
 
 #include <v4r/io/filesystem.h>
 
-#include "recognition_srv_definitions/recognize.h"
-#include "object_tracker_srv_definitions/change_tracking_model.h"
-#include "object_tracker_srv_definitions/cleanup.h"
-#include "object_tracker_srv_definitions/start_tracker.h"
-#include "object_tracker_srv_definitions/stop_tracker.h"
-#include "object_tracker_srv_definitions/detect_and_track.h"
+#include "recognition_srvs/recognize.h"
+#include "object_tracker_srvs/change_tracking_model.h"
+#include "object_tracker_srvs/cleanup.h"
+#include "object_tracker_srvs/start_tracker.h"
+#include "object_tracker_srvs/stop_tracker.h"
+#include "object_tracker_srvs/detect_and_track.h"
 
 class DetectAndTrackDemo
 {
@@ -45,7 +45,7 @@ public:
     void callUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
         std::cout << "Received point cloud.\n" << std::endl;
-        recognition_srv_definitions::recognize srv;
+        recognition_srvs::recognize srv;
         srv.request.cloud = *msg;
 
         if (!sv_rec_client_.call(srv)) { ROS_ERROR("Failed to call /recognition_service/sv_recognition"); return; }
@@ -62,8 +62,8 @@ public:
 
                 // Take first model to track
                 std::string new_tracking_model = detected_ids[0].data + "/tracking_model.ao";
-                object_tracker_srv_definitions::start_tracker srv_obj_track_start;
-                object_tracker_srv_definitions::change_tracking_model srv_obj_track_ch_m;
+                object_tracker_srvs::start_tracker srv_obj_track_start;
+                object_tracker_srvs::change_tracking_model srv_obj_track_ch_m;
                 srv_obj_track_ch_m.request.filename = models_dir_ + "/" + new_tracking_model;
 
                 if ( !obj_track_change_model_.call(srv_obj_track_ch_m) ) { std::cerr<<"Failed to change object tracker model!" << std::endl; return; }
@@ -105,11 +105,11 @@ public:
     }
 
     bool
-    detectAndTrack( object_tracker_srv_definitions::detect_and_track::Request & req,
-                    object_tracker_srv_definitions::detect_and_track::Response & response)
+    detectAndTrack( object_tracker_srvs::detect_and_track::Request & req,
+                    object_tracker_srvs::detect_and_track::Response & response)
     {
-        object_tracker_srv_definitions::stop_tracker srv_obj_track_stop;
-        object_tracker_srv_definitions::cleanup srv_obj_track_cleanup;
+        object_tracker_srvs::stop_tracker srv_obj_track_stop;
+        object_tracker_srvs::cleanup srv_obj_track_cleanup;
         if ( !obj_track_stop_.call(srv_obj_track_stop) ) { std::cerr<<"Failed to stop object tracker!" << std::endl; }
         if ( !obj_track_stop_.call(srv_obj_track_cleanup) ) { std::cerr<<"Failed to cleanup object tracker!" << std::endl; }
 
@@ -124,13 +124,13 @@ public:
         n_ = new ros::NodeHandle ( "~" );
 
         std::string service_name_sv_rec = "/recognition_service/";
-        sv_rec_client_ = n_->serviceClient<recognition_srv_definitions::recognize>(service_name_sv_rec + "sv_recognition");
+        sv_rec_client_ = n_->serviceClient<recognition_srvs::recognize>(service_name_sv_rec + "sv_recognition");
 
         std::string service_name_obj_tracker = "/object_tracker/";
-        obj_track_start_ = n_->serviceClient<object_tracker_srv_definitions::start_tracker>(service_name_obj_tracker + "start_recording");
-        obj_track_stop_ = n_->serviceClient<object_tracker_srv_definitions::stop_tracker>(service_name_obj_tracker + "stop_recording");
-        obj_track_change_model_ = n_->serviceClient<object_tracker_srv_definitions::change_tracking_model>(service_name_obj_tracker + "change_tracking_model");
-        obj_track_cleanup_ = n_->serviceClient<object_tracker_srv_definitions::cleanup>(service_name_obj_tracker + "cleanup");
+        obj_track_start_ = n_->serviceClient<object_tracker_srvs::start_tracker>(service_name_obj_tracker + "start_recording");
+        obj_track_stop_ = n_->serviceClient<object_tracker_srvs::stop_tracker>(service_name_obj_tracker + "stop_recording");
+        obj_track_change_model_ = n_->serviceClient<object_tracker_srvs::change_tracking_model>(service_name_obj_tracker + "change_tracking_model");
+        obj_track_cleanup_ = n_->serviceClient<object_tracker_srvs::cleanup>(service_name_obj_tracker + "cleanup");
         detect_and_track_  = n_->advertiseService ("detect_and_track", &DetectAndTrackDemo::detectAndTrack, this);
 
         it_.reset(new image_transport::ImageTransport(*n_));

@@ -5,7 +5,7 @@ project(camera_tracker)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 
-find_package(catkin REQUIRED COMPONENTS roscpp rospy camera_srv_definitions
+find_package(catkin REQUIRED COMPONENTS roscpp rospy camera_tracker_srvs
                                          genmsg tf2 tf visualization_msgs
                                         cv_bridge image_transport pcl_conversions)
 
@@ -43,12 +43,13 @@ find_package(OpenGL REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
    INCLUDE_DIRS include
-   CATKIN_DEPENDS roscpp rospy camera_srv_definitions tf2
+   CATKIN_DEPENDS roscpp rospy camera_tracker_srvs tf2
 )
 
 ###########
 ## Build ##
 ###########
+link_directories(${V4R_3RDPARTY_LIB_DIR_OPT})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 

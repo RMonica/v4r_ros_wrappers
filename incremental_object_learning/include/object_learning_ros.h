@@ -5,11 +5,11 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Transform.h>
 
-#include "incremental_object_learning_srv_definitions/clear.h"
-#include "incremental_object_learning_srv_definitions/learn_object.h"
-#include "incremental_object_learning_srv_definitions/learn_object_inc.h"
-#include "incremental_object_learning_srv_definitions/save_model.h"
-#include "incremental_object_learning_srv_definitions/visualize.h"
+#include "incremental_object_learning_srvs/clear.h"
+#include "incremental_object_learning_srvs/learn_object.h"
+#include "incremental_object_learning_srvs/learn_object_inc.h"
+#include "incremental_object_learning_srvs/save_model.h"
+#include "incremental_object_learning_srvs/visualize.h"
 
 namespace v4r
 {
@@ -32,20 +32,20 @@ private:
 public:
     void initSIFT (int argc, char ** argv);
 
-    bool clear_cached_model (incremental_object_learning_srv_definitions::clear::Request & req,
-                     incremental_object_learning_srv_definitions::clear::Response & response);
+    bool clear_cached_model (incremental_object_learning_srvs::clear::Request & req,
+                     incremental_object_learning_srvs::clear::Response & response);
 
-    bool save_model (incremental_object_learning_srv_definitions::save_model::Request & req,
-                     incremental_object_learning_srv_definitions::save_model::Response & response);
+    bool save_model (incremental_object_learning_srvs::save_model::Request & req,
+                     incremental_object_learning_srvs::save_model::Response & response);
 
-    bool visualizeROS(incremental_object_learning_srv_definitions::visualize::Request & req,
-                        incremental_object_learning_srv_definitions::visualize::Response & response);
+    bool visualizeROS(incremental_object_learning_srvs::visualize::Request & req,
+                        incremental_object_learning_srvs::visualize::Response & response);
 
-    bool learn_object (incremental_object_learning_srv_definitions::learn_object::Request & req,
-                       incremental_object_learning_srv_definitions::learn_object::Response & response);
+    bool learn_object (incremental_object_learning_srvs::learn_object::Request & req,
+                       incremental_object_learning_srvs::learn_object::Response & response);
 
-    bool learn_object_inc (incremental_object_learning_srv_definitions::learn_object_inc::Request & req,
-                           incremental_object_learning_srv_definitions::learn_object_inc::Response & response);
+    bool learn_object_inc (incremental_object_learning_srvs::learn_object_inc::Request & req,
+                           incremental_object_learning_srvs::learn_object_inc::Response & response);
 
     static Eigen::Matrix4f fromGMTransform(const geometry_msgs::Transform & gm_trans)
     {

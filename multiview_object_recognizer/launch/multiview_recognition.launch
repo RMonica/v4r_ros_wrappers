@@ -1,6 +1,0 @@
-<launch>
-  <arg name="param"/>
-  
-  <!-- Multi-View Object Recognizer -->
-  <node pkg="multiview_object_recognizer" type="multiview_object_recognizer_node" name="multiview_object_recognizer_node" output="screen" args="$(arg param)" />
-</launch> 

@@ -12,10 +12,10 @@
 #include "ros/ros.h"
 #include "sensor_msgs/PointCloud2.h"
 #include "std_msgs/String.h"
-#include "incremental_object_learning_srv_definitions/clear.h"
-#include "incremental_object_learning_srv_definitions/learn_object.h"
-#include "incremental_object_learning_srv_definitions/save_model.h"
-#include "incremental_object_learning_srv_definitions/visualize.h"
+#include "incremental_object_learning_srvs/clear.h"
+#include "incremental_object_learning_srvs/learn_object.h"
+#include "incremental_object_learning_srvs/save_model.h"
+#include "incremental_object_learning_srvs/visualize.h"
 #include <opencv2/opencv.hpp>
 #include <v4r/io/filesystem.h>
 
@@ -38,8 +38,8 @@ public:
         std::vector<std::string> poses_str = v4r::io::getFilesInDirectory(directory_, ".*pose.*.txt", false);;
 
         std::string service_name_clear = "/incremental_object_learning/clear_cached_model";
-        ros::ServiceClient IOL_clear_client = n_->serviceClient<incremental_object_learning_srv_definitions::clear>(service_name_clear);
-        incremental_object_learning_srv_definitions::clear srv_clear;
+        ros::ServiceClient IOL_clear_client = n_->serviceClient<incremental_object_learning_srvs::clear>(service_name_clear);
+        incremental_object_learning_srvs::clear srv_clear;
 
         if ( ! IOL_clear_client.call ( srv_clear ) )
         {
@@ -49,16 +49,16 @@ public:
         }
 
         std::string service_name_learn = "/incremental_object_learning/learn_object";
-        ros::ServiceClient IOLclient = n_->serviceClient<incremental_object_learning_srv_definitions::learn_object>(service_name_learn);
-        incremental_object_learning_srv_definitions::learn_object srv_learn;
+        ros::ServiceClient IOLclient = n_->serviceClient<incremental_object_learning_srvs::learn_object>(service_name_learn);
+        incremental_object_learning_srvs::learn_object srv_learn;
 
         std::string service_name_save = "/incremental_object_learning/save_model";
-        ros::ServiceClient IOLclient_save = n_->serviceClient<incremental_object_learning_srv_definitions::save_model>(service_name_save);
-        incremental_object_learning_srv_definitions::save_model srv_save;
+        ros::ServiceClient IOLclient_save = n_->serviceClient<incremental_object_learning_srvs::save_model>(service_name_save);
+        incremental_object_learning_srvs::save_model srv_save;
 
         std::string service_name_vis = "/incremental_object_learning/visualize";
-        ros::ServiceClient IOLclient_vis = n_->serviceClient<incremental_object_learning_srv_definitions::visualize>(service_name_vis);
-        incremental_object_learning_srv_definitions::visualize srv_vis;
+        ros::ServiceClient IOLclient_vis = n_->serviceClient<incremental_object_learning_srvs::visualize>(service_name_vis);
+        incremental_object_learning_srvs::visualize srv_vis;
 
         if ( !mask_file_.compare("") )
             mask_file_ = directory_ + "/mask.txt";

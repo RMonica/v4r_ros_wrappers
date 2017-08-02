@@ -40,7 +40,7 @@ namespace v4r
 
 template<typename PointT>
 bool
-ClassifierROS<PointT>::classify (classifier_srv_definitions::classify::Request &req, classifier_srv_definitions::classify::Response &response)
+ClassifierROS<PointT>::classify (classifier_srvs::classify::Request &req, classifier_srvs::classify::Response &response)
 {
     cloud_.reset (new pcl::PointCloud<PointT>());
     pcl::fromROSMsg(req.cloud, *cloud_);

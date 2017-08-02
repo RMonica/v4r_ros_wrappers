@@ -214,8 +214,8 @@ CamTracker::cleanup ()
 }
 
 bool
-CamTracker::start (camera_srv_definitions::start_tracker::Request & req,
-                   camera_srv_definitions::start_tracker::Response & response)
+CamTracker::start (camera_tracker_srvs::start_tracker::Request & req,
+                   camera_tracker_srvs::start_tracker::Response & response)
 {
     (void) req;
     (void) response;
@@ -282,8 +282,8 @@ CamTracker::start (camera_srv_definitions::start_tracker::Request & req,
 }
 
 bool
-CamTracker::stop (camera_srv_definitions::start_tracker::Request & req,
-      camera_srv_definitions::start_tracker::Response & response)
+CamTracker::stop (camera_tracker_srvs::start_tracker::Request & req,
+      camera_tracker_srvs::start_tracker::Response & response)
 {
 #ifdef USE_PCL_GRABBER
     if(interface.get())
@@ -336,8 +336,8 @@ CamTracker::createObjectCloudFiltered(pcl::PointCloud<pcl::PointXYZRGB>::Ptr & o
 }
 
 bool
-CamTracker::doBA (camera_srv_definitions::do_ba::Request & req,
-                  camera_srv_definitions::do_ba::Response & response)
+CamTracker::doBA (camera_tracker_srvs::do_ba::Request & req,
+                  camera_tracker_srvs::do_ba::Response & response)
 {
     if(cameras_.empty())
     {
@@ -358,8 +358,8 @@ CamTracker::doBA (camera_srv_definitions::do_ba::Request & req,
 }
 
 bool
-CamTracker::getTrackingResults (camera_srv_definitions::get_tracking_results::Request & req,
-                                camera_srv_definitions::get_tracking_results::Response & response)
+CamTracker::getTrackingResults (camera_tracker_srvs::get_tracking_results::Request & req,
+                                camera_tracker_srvs::get_tracking_results::Response & response)
 {
     for(size_t i=0; i < cameras_.size(); i++)
     {
@@ -387,8 +387,8 @@ CamTracker::getTrackingResults (camera_srv_definitions::get_tracking_results::Re
 }
 
 bool
-CamTracker::saveTrackingResultsToFile(camera_srv_definitions::save_tracking_results_to_file::Request &req,
-                                      camera_srv_definitions::save_tracking_results_to_file::Response &response)
+CamTracker::saveTrackingResultsToFile(camera_tracker_srvs::save_tracking_results_to_file::Request &req,
+                                      camera_tracker_srvs::save_tracking_results_to_file::Response &response)
 {
     using namespace boost::filesystem;
     try
@@ -420,8 +420,8 @@ CamTracker::saveTrackingResultsToFile(camera_srv_definitions::save_tracking_resu
 }
 
 bool
-CamTracker::visCompound (camera_srv_definitions::visualize_compound::Request & req,
-                         camera_srv_definitions::visualize_compound::Response & response)
+CamTracker::visCompound (camera_tracker_srvs::visualize_compound::Request & req,
+                         camera_tracker_srvs::visualize_compound::Response & response)
 {
     (void)response;
     if(cameras_.empty())

@@ -3,7 +3,7 @@ project(object_classifier)
 
 find_package(catkin REQUIRED COMPONENTS roscpp 
    sensor_msgs std_msgs visualization_msgs 
-   segmentation_srv_definitions classifier_srv_definitions object_perception_msgs pcl_conversions)
+   segmentation_srvs classifier_srvs object_perception_msgs pcl_conversions)
 
 find_package(OpenCV REQUIRED)
 find_package(PCL REQUIRED)
@@ -13,11 +13,12 @@ include_directories(${PCL_INCLUDE_DIRS})
 
 catkin_package(
    INCLUDE_DIRS include
-   CATKIN_DEPENDS classifier_srv_definitions pcl_conversions
+   CATKIN_DEPENDS classifier_srvs pcl_conversions
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+link_directories(${V4R_3RDPARTY_LIB_DIR_OPT})
 include_directories(include ${catkin_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${V4R_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 set(incs include/global_classifier.h)

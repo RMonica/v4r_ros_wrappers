@@ -18,7 +18,7 @@
 #include <v4r/common/pcl_opencv.h>
 #include <v4r/io/filesystem.h>
 
-#include "recognition_srv_definitions/recognize.h"
+#include "recognition_srvs/recognize.h"
 
 class SingleViewRecognizerDemo
 {
@@ -42,7 +42,7 @@ public:
     void callSvRecognizerUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
         std::cout << "Received point cloud.\n" << std::endl;
-        recognition_srv_definitions::recognize srv;
+        recognition_srvs::recognize srv;
         srv.request.cloud = *msg;
 
         if (sv_rec_client_.call(srv))
@@ -91,8 +91,8 @@ public:
 //        bool retrain = false;
 //        if(retrain) // this is necessary if the model database of the recognizer has changed
 //        {
-//            ros::ServiceClient retrainClient = n_->serviceClient<recognition_srv_definitions::retrain_recognizer>("/recognition_service/mp_recognition_retrain");
-//            recognition_srv_definitions::retrain_recognizer srv;
+//            ros::ServiceClient retrainClient = n_->serviceClient<recognition_srvs::retrain_recognizer>("/recognition_service/mp_recognition_retrain");
+//            recognition_srvs::retrain_recognizer srv;
 //            for(size_t k=0; k < model_ids_to_be_loaded_.size(); k++)
 //            {
 //                std_msgs::String a;
@@ -122,7 +122,7 @@ public:
             pcl::io::loadPCDFile(directory_ + "/" + test_cloud[i], cloud);
             sensor_msgs::PointCloud2 cloud_ros;
             pcl::toROSMsg(cloud, cloud_ros);
-            recognition_srv_definitions::recognize srv_rec;
+            recognition_srvs::recognize srv_rec;
             srv_rec.request.cloud = cloud_ros;
 
             if (sv_rec_client_.call(srv_rec))
@@ -153,7 +153,7 @@ public:
         n_ = new ros::NodeHandle ( "~" );
 
         std::string service_name_sv_rec = "/recognition_service/sv_recognition";
-        sv_rec_client_ = n_->serviceClient<recognition_srv_definitions::recognize>(service_name_sv_rec);
+        sv_rec_client_ = n_->serviceClient<recognition_srvs::recognize>(service_name_sv_rec);
         it_.reset(new image_transport::ImageTransport(*n_));
         image_pub_ = it_->advertise("/mp_recognition/debug_image", 1, true);
 

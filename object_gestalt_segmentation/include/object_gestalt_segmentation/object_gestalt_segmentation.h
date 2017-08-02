@@ -21,7 +21,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 
-#include "segmentation_srv_definitions/segment.h"
+#include "segmentation_srvs/segment.h"
 
 #ifndef OBJECT_GESTALT_SEGMENTATION_HPP_
 #define OBJECT_GESTALT_SEGMENTATION_HPP_
@@ -36,7 +36,7 @@ private:
   std::string model_filename_, scaling_filename_;
 
   bool
-  segment (segmentation_srv_definitions::segment::Request & req, segmentation_srv_definitions::segment::Response & response);
+  segment (segmentation_srvs::segment::Request & req, segmentation_srvs::segment::Response & response);
   
 public:
   SegmenterComplete ();

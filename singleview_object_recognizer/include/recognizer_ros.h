@@ -1,6 +1,6 @@
-#include "recognition_srv_definitions/get_configuration.h"
-#include "recognition_srv_definitions/recognize.h"
-#include "recognition_srv_definitions/retrain_recognizer.h"
+#include "recognition_srvs/get_configuration.h"
+#include "recognition_srvs/recognize.h"
+#include "recognition_srvs/retrain_recognizer.h"
 
 #include <image_transport/image_transport.h>
 #include <v4r/apps/ObjectRecognizer.h>
@@ -24,14 +24,14 @@ private:
     typename pcl::PointCloud<PointT>::Ptr scene_; ///< input cloud
     mutable v4r::Camera::Ptr camera_; ///< camera (if cloud is not organized)
 
-    bool respondSrvCall(recognition_srv_definitions::recognize::Request &req, recognition_srv_definitions::recognize::Response &response) const;
+    bool respondSrvCall(recognition_srvs::recognize::Request &req, recognition_srvs::recognize::Response &response) const;
 
 public:
     RecognizerROS()
     {}
 
-    bool recognizeROS (recognition_srv_definitions::recognize::Request & req,
-                       recognition_srv_definitions::recognize::Response & response);
+    bool recognizeROS (recognition_srvs::recognize::Request & req,
+                       recognition_srvs::recognize::Response & response);
 
     bool initialize (int argc, char ** argv);
 

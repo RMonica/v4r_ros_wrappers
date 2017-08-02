@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(object_tracker)
 
-find_package(catkin REQUIRED COMPONENTS roscpp rospy object_tracker_srv_definitions
+find_package(catkin REQUIRED COMPONENTS roscpp rospy object_tracker_srvs
                                          genmsg tf2 tf visualization_msgs
                                         cv_bridge image_transport pcl_conversions)
 
@@ -10,7 +10,7 @@ find_package( OpenCV REQUIRED )
 find_package( V4R REQUIRED )
 catkin_package(
    INCLUDE_DIRS include
-   CATKIN_DEPENDS roscpp rospy object_tracker_srv_definitions tf2
+   CATKIN_DEPENDS roscpp rospy object_tracker_srvs tf2
 )
 
 ###########
@@ -25,6 +25,7 @@ include_directories(include
   ${V4R_INCLUDE_DIRS}
 )
 
+link_directories(${V4R_3RDPARTY_LIB_DIR_OPT})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(incs include/object_tracker.h)

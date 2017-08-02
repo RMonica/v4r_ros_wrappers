@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>temporal_filtering</name>
-  <version>0.0.0</version>
+  <version>0.1.5</version>
   <description>The temporal_filtering package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 

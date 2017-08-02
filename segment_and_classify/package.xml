@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>segment_and_classify</name>
-  <version>0.1.4</version>
+  <version>0.1.5</version>
   <description>The segmentation package</description>
 
   <maintainer email="faeulhammer@acin.tuwien.ac.at">Thomas Faeulhammer</maintainer>
@@ -13,8 +13,8 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
-  <build_depend>segmentation_srv_definitions</build_depend>
-  <build_depend>classifier_srv_definitions</build_depend>
+  <build_depend>segmentation_srvs</build_depend>
+  <build_depend>classifier_srvs</build_depend>
   <build_depend>cv_bridge</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>image_transport</build_depend>
@@ -29,8 +29,8 @@
   <run_depend>segmentation</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>rospy</run_depend>
-  <run_depend>segmentation_srv_definitions</run_depend>
-  <run_depend>classifier_srv_definitions</run_depend>
+  <run_depend>segmentation_srvs</run_depend>
+  <run_depend>classifier_srvs</run_depend>
   <run_depend>pcl_conversions</run_depend>
 
   <build_depend>v4r</build_depend>

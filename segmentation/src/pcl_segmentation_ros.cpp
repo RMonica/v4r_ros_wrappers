@@ -18,8 +18,8 @@ namespace v4r
 {
 
 template<typename PointT> bool
-SegmenterROS<PointT>::do_segmentation_ROS(segmentation_srv_definitions::segment::Request & req,
-                    segmentation_srv_definitions::segment::Response & response)
+SegmenterROS<PointT>::do_segmentation_ROS(segmentation_srvs::segment::Request & req,
+                    segmentation_srvs::segment::Response & response)
 {
     cloud_.reset(new pcl::PointCloud<PointT>);
     pcl::fromROSMsg(req.cloud, *cloud_);
@@ -31,8 +31,8 @@ SegmenterROS<PointT>::do_segmentation_ROS(segmentation_srv_definitions::segment:
 }
 
 template<typename PointT> bool
-SegmenterROS<PointT>::respondSrvCall(segmentation_srv_definitions::segment::Request &req,
-                            segmentation_srv_definitions::segment::Response &response) const
+SegmenterROS<PointT>::respondSrvCall(segmentation_srvs::segment::Request &req,
+                            segmentation_srvs::segment::Response &response) const
 {
     typename pcl::PointCloud<PointT>::Ptr colored_cloud (new pcl::PointCloud<PointT>(*cloud_));
 

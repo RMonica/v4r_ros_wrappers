@@ -2,7 +2,7 @@
 
 #include <ros/ros.h>
 
-#include "segmentation_srv_definitions/segment.h"
+#include "segmentation_srvs/segment.h"
 #include <image_transport/image_transport.h>
 
 #include <v4r/apps/CloudSegmenter.h>
@@ -34,11 +34,11 @@ public:
 
     void initialize(int argc, char ** argv);
 
-    bool do_segmentation_ROS(segmentation_srv_definitions::segment::Request & req,
-                             segmentation_srv_definitions::segment::Response & response);
+    bool do_segmentation_ROS(segmentation_srvs::segment::Request & req,
+                             segmentation_srvs::segment::Response & response);
 
-    bool respondSrvCall(segmentation_srv_definitions::segment::Request &req,
-                                segmentation_srv_definitions::segment::Response &response) const;
+    bool respondSrvCall(segmentation_srvs::segment::Request &req,
+                                segmentation_srvs::segment::Response &response) const;
 };
 
 }

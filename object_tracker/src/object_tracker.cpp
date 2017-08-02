@@ -160,8 +160,8 @@ ObjTrackerMono::setup(int argc, char **argv)
 }
 
 bool
-ObjTrackerMono::start (object_tracker_srv_definitions::start_tracker::Request & req,
-                   object_tracker_srv_definitions::start_tracker::Response & response)
+ObjTrackerMono::start (object_tracker_srvs::start_tracker::Request & req,
+                   object_tracker_srvs::start_tracker::Response & response)
 {
     (void) req;
     (void) response;
@@ -178,8 +178,8 @@ ObjTrackerMono::start (object_tracker_srv_definitions::start_tracker::Request & 
 
 
 bool
-ObjTrackerMono::changeTrackingModel (object_tracker_srv_definitions::change_tracking_model::Request & req,
-                                     object_tracker_srv_definitions::change_tracking_model::Response & response)
+ObjTrackerMono::changeTrackingModel (object_tracker_srvs::change_tracking_model::Request & req,
+                                     object_tracker_srvs::change_tracking_model::Response & response)
 {
     (void) response;
 
@@ -213,8 +213,8 @@ ObjTrackerMono::changeTrackingModel (object_tracker_srv_definitions::change_trac
 }
 
 bool
-ObjTrackerMono::stop (object_tracker_srv_definitions::stop_tracker::Request & req,
-      object_tracker_srv_definitions::stop_tracker::Response & response)
+ObjTrackerMono::stop (object_tracker_srvs::stop_tracker::Request & req,
+      object_tracker_srvs::stop_tracker::Response & response)
 {
     camera_topic_subscriber_.shutdown();
     confidence_publisher_.shutdown();

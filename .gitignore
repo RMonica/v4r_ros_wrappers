@@ -5,6 +5,8 @@ bin
 lib
 doc
 *~
+*debian
+*obj-x86_64-linux-gnu/
 
 # CMake
 CMakeCache.txt
