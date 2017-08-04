@@ -30,7 +30,7 @@ move_debian_packages
 }
 
 release_ros_wrappers() {
-for i in `ls -d */|grep -v 'rosdep\|msgs\|srvs\|v4r_ros_wrappers\|multiview'`; do
+for i in `ls -d */|grep -v 'rosdep\|images\|msgs\|srvs\|v4r_ros_wrappers\|multiview'`; do
 	cd $i && \
 	create_debian_package
 	cd ..;
