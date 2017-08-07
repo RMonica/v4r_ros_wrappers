@@ -40,8 +40,7 @@ move_debian_packages
 }
 
 release_meta_package() {
-CWD=${PWD##*/} 
-cd $CWD && \
+cd v4r_ros_wrappers && \
 create_debian_package
 cd ..
 dpkg -i ros-*v4r*wrappers*_amd64.deb
