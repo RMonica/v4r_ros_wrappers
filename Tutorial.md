@@ -121,7 +121,7 @@ std_msgs/String[] ids                 # name of the recognised object model
 geometry_msgs/Transform[] transforms  # 6D object pose
 float32[] confidence                  # ratio of visible points
 geometry_msgs/Point32[] centroid      # centroid of the cluster
-object_perception_msgs/BBox[] bbox    # bounding box of the cluster
+v4r_object_perception_msgs/BBox[] bbox    # bounding box of the cluster
 sensor_msgs/PointCloud2[] models_cloud  # point cloud of the model transformed into camera coordinates
 ```
 For you, all you have to provide is a point cloud. The recogniser will return arrays of ids (the name you gave during modelling), transforms (the 6D object poses), as well as confidences, bounding boxes and the segmented point clouds corresponding to the recognised portions of the scene.

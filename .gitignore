@@ -57,3 +57,7 @@ CMakeLists.txt.user # created by QT creator for instance
 *.bag
 
 *.user
+
+# Backup files
+*.bak
+*.bkp
