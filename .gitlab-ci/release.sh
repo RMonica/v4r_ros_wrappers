@@ -6,7 +6,7 @@ for i in *msgs; do
 	create_debian_package
 	cd ..;
 done
-dpkg -i ros-*msgs*_amd64.deb
+dpkg -i ros-*msgs*_amd64.deb > /dev/null
 }
 
 release_dependency_messages() {
@@ -15,7 +15,7 @@ for i in v4r_object_perception_msgs; do
 	create_debian_package
 	cd ..;
 done
-dpkg -i ros-*_amd64.deb
+dpkg -i ros-*_amd64.deb > /dev/null
 move_debian_packages
 }
 
@@ -25,7 +25,7 @@ for i in v4r_object_tracker v4r_object_classifier v4r_segmentation v4r_singlevie
 	create_debian_package
 	cd ..;
 done
-dpkg -i ros-*_amd64.deb
+dpkg -i ros-*_amd64.deb > /dev/null
 move_debian_packages
 }
 
@@ -35,7 +35,7 @@ for i in `ls -d */|grep -v 'rosdep\|images\|msgs\|v4r_ros_wrappers\|multiview'`;
 	create_debian_package
 	cd ..;
 done
-dpkg -i ros-*_amd64.deb
+dpkg -i ros-*_amd64.deb > /dev/null
 move_debian_packages
 }
 
@@ -43,14 +43,14 @@ release_meta_package() {
 cd v4r_ros_wrappers && \
 create_debian_package
 cd ..
-dpkg -i ros-*v4r*wrappers*_amd64.deb
+dpkg -i ros-*v4r*wrappers*_amd64.deb > /dev/null
 move_debian_packages
 }
 
 create_debian_package() {
 bloom-generate rosdebian --os-name ubuntu --os-version $UBUNTU_DISTRO --ros-distro $CI_ROS_DISTRO &&\
 sed -i 's/dh  $@/dh  $@ --parallel/' debian/rules
-debuild -rfakeroot -us -uc -b -j8
+debuild -rfakeroot -us -uc -b -j8 > /dev/null
 }
 
 move_debian_packages() {

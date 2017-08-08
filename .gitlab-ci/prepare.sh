@@ -2,7 +2,7 @@
 
 add_v4r_yaml() {
 echo "yaml file:///`pwd`/rosdep/${CI_ROS_DISTRO}.yaml" | sudo tee /etc/ros/rosdep/sources.list.d/10-v4r.list
-rosdep update
+rosdep update > /dev/null
 }
 
 setup_apt() {
