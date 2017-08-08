@@ -1,16 +1,16 @@
 #!/bin/bash
 
 release_messages() {
-for i in *msgs *srvs; do 
+for i in *msgs; do 
 	cd $i && \
 	create_debian_package
 	cd ..;
 done
-dpkg -i ros-*srv*_amd64.deb ros-*msgs*_amd64.deb
+dpkg -i ros-*msgs*_amd64.deb
 }
 
 release_dependency_messages() {
-for i in object_perception_msgs; do 
+for i in v4r_object_perception_msgs; do 
 	cd $i && \
 	create_debian_package
 	cd ..;
@@ -20,7 +20,7 @@ move_debian_packages
 }
 
 release_dependency_packages() {
-for i in object_tracker object_classifier segmentation singleview_object_recognizer; do 
+for i in v4r_object_tracker v4r_object_classifier v4r_segmentation v4r_singleview_object_recognizer; do 
 	cd $i && \
 	create_debian_package
 	cd ..;
@@ -30,7 +30,7 @@ move_debian_packages
 }
 
 release_ros_wrappers() {
-for i in `ls -d */|grep -v 'rosdep\|images\|msgs\|srvs\|v4r_ros_wrappers\|multiview'`; do
+for i in `ls -d */|grep -v 'rosdep\|images\|msgs\|v4r_ros_wrappers\|multiview'`; do
 	cd $i && \
 	create_debian_package
 	cd ..;
@@ -40,8 +40,7 @@ move_debian_packages
 }
 
 release_meta_package() {
-CWD=${PWD##*/} 
-cd $CWD && \
+cd v4r_ros_wrappers && \
 create_debian_package
 cd ..
 dpkg -i ros-*v4r*wrappers*_amd64.deb
