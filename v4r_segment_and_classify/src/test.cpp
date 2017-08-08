@@ -15,7 +15,7 @@
 
 #include <v4r/io/filesystem.h>
 #include "v4r_segmentation_msgs/segment.h"
-#include "v4r_classifier_msgs/classify.h"
+#include "v4r_object_classification_msgs/classify.h"
 
 class SegmenationAndClassifyDemo
 {
@@ -46,7 +46,7 @@ public:
             std::cerr << "Error calling segmentation service!" << std::endl;
         else
         {
-            v4r_classifier_msgs::classify srv_classify;
+            v4r_object_classification_msgs::classify srv_classify;
             srv_classify.request.cloud = srv_seg.request.cloud;
             srv_classify.request.clusters_indices = srv_seg.response.clusters_indices;
 
@@ -95,7 +95,7 @@ public:
             }
             else
             {
-                v4r_classifier_msgs::classify srv_classify;
+                v4r_object_classification_msgs::classify srv_classify;
                 srv_classify.request.cloud = srv_seg.request.cloud;
                 srv_classify.request.clusters_indices = srv_seg.response.clusters_indices;
 
@@ -117,7 +117,7 @@ public:
         std::string service_name_seg = "/pcl_segmentation_service/pcl_segmentation";
         std::string service_name_classify = "/classifier_service/classify";
         srv_client_seg = n_->serviceClient<v4r_segmentation_msgs::segment>(service_name_seg);
-        srv_client_classify = n_->serviceClient<v4r_classifier_msgs::classify>(service_name_classify);
+        srv_client_classify = n_->serviceClient<v4r_object_classification_msgs::classify>(service_name_classify);
 
         n_->getParam ( "input_method", input_method_ );
 

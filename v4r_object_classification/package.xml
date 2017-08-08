@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>v4r_object_classifier</name>
+  <name>v4r_object_classification</name>
   <version>0.1.5</version>
   <description>The object_classifier package</description>
   <maintainer email="faeulhammer@acin.tuwien.ac.at">Thomas Faeulhammer</maintainer>
@@ -13,14 +13,14 @@
   <build_depend>visualization_msgs</build_depend>
 	<build_depend>sensor_msgs</build_depend>
 	<build_depend>std_msgs</build_depend>
-  <build_depend>v4r_classifier_msgs</build_depend>
+  <build_depend>v4r_object_classification_msgs</build_depend>
   <build_depend>v4r_segmentation_msgs</build_depend>
   <build_depend>pcl_conversions</build_depend>
 
   <run_depend>roscpp</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
-  <run_depend>v4r_classifier_msgs</run_depend>
+  <run_depend>v4r_object_classification_msgs</run_depend>
   <run_depend>visualization_msgs</run_depend>
   <run_depend>v4r_segmentation_msgs</run_depend>
   <run_depend>pcl_conversions</run_depend>

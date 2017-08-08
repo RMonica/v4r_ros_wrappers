@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(v4r_segment_and_classify)
 
-find_package(catkin REQUIRED COMPONENTS roscpp sensor_msgs std_msgs visualization_msgs pcl_conversions v4r_segmentation_msgs v4r_classifier_msgs v4r_object_perception_msgs v4r_segmentation v4r_object_classifier)
+find_package(catkin REQUIRED COMPONENTS roscpp sensor_msgs std_msgs visualization_msgs pcl_conversions v4r_segmentation_msgs v4r_object_classification_msgs v4r_segmentation v4r_object_classification)
 find_package(PCL REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(V4R REQUIRED)
 
 catkin_package(
-   CATKIN_DEPENDS v4r_segmentation_msgs v4r_classifier_msgs v4r_object_classifier v4r_segmentation pcl_conversions
+   CATKIN_DEPENDS v4r_segmentation_msgs v4r_object_classification_msgs v4r_object_classification v4r_segmentation pcl_conversions
 )
 
 link_directories(${V4R_3RDPARTY_LIB_DIR_OPT})

@@ -84,7 +84,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES v4r_recognition_msgs
+#  LIBRARIES v4r_object_recognition_msgs
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -98,19 +98,19 @@ catkin_package(
 # include_directories(include)
 
 ## Declare a cpp library
-# add_library(v4r_recognition_msgs
-#   src/${PROJECT_NAME}/v4r_recognition_msgs.cpp
+# add_library(v4r_object_recognition_msgs
+#   src/${PROJECT_NAME}/v4r_object_recognition_msgs.cpp
 # )
 
 ## Declare a cpp executable
-# add_executable(v4r_recognition_msgs_node src/v4r_recognition_msgs_node.cpp)
+# add_executable(v4r_object_recognition_msgs_node src/v4r_object_recognition_msgs_node.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(v4r_recognition_msgs_node v4r_recognition_msgs_generate_messages_cpp)
+# add_dependencies(v4r_object_recognition_msgs_node v4r_object_recognition_msgs_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(v4r_recognition_msgs_node
+# target_link_libraries(v4r_object_recognition_msgs_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -129,7 +129,7 @@ catkin_package(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS v4r_recognition_msgs v4r_recognition_msgs_node
+# install(TARGETS v4r_object_recognition_msgs v4r_object_recognition_msgs_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -154,7 +154,7 @@ catkin_package(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_v4r_recognition_msgs.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_v4r_object_recognition_msgs.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

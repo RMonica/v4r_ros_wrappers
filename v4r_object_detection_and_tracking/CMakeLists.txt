@@ -7,11 +7,11 @@ find_package(catkin REQUIRED COMPONENTS
   v4r_object_tracker
   v4r_object_tracker_msgs
   pcl_conversions
-  v4r_recognition_msgs
+  v4r_object_recognition_msgs
   roscpp
   rospy
   sensor_msgs
-  v4r_singleview_object_recognizer
+  v4r_object_recognition
 )
 
 

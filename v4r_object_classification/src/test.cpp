@@ -12,8 +12,8 @@
 #include "sensor_msgs/PointCloud2.h"
 #include "std_msgs/String.h"
 #include "std_msgs/Int32MultiArray.h"
-#include "v4r_classifier_msgs/segment_and_classify.h"
-#include "v4r_classifier_msgs/classify.h"
+#include "v4r_object_classification_msgs/segment_and_classify.h"
+#include "v4r_object_classification_msgs/classify.h"
 #include "v4r_segmentation_msgs/segment.h"
 #include "v4r_object_perception_msgs/classification.h"
 #include "geometry_msgs/Point32.h"
@@ -89,8 +89,8 @@ private:
 
     bool callClassifierService(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
-        ros::ServiceClient classifierClient = n_->serviceClient<v4r_classifier_msgs::classify>("/classifier_service/classify");
-        v4r_classifier_msgs::classify srv;
+        ros::ServiceClient classifierClient = n_->serviceClient<v4r_object_classification_msgs::classify>("/classifier_service/classify");
+        v4r_object_classification_msgs::classify srv;
         srv.request.cloud = *msg;
         srv.request.clusters_indices = cluster_indices_ros_;
         if (classifierClient.call(srv))
@@ -109,8 +109,8 @@ private:
 
     bool callSegAndClassifierService(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
-        ros::ServiceClient segAndClassifierClient = n_->serviceClient<v4r_classifier_msgs::segment_and_classify>("/classifier_service/segment_and_classify");
-        v4r_classifier_msgs::segment_and_classify srv;
+        ros::ServiceClient segAndClassifierClient = n_->serviceClient<v4r_object_classification_msgs::segment_and_classify>("/classifier_service/segment_and_classify");
+        v4r_object_classification_msgs::segment_and_classify srv;
         srv.request.cloud = *msg;
         if (segAndClassifierClient.call(srv))
         {

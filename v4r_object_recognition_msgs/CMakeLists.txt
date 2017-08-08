@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(v4r_classifier_msgs)
+project(v4r_object_recognition_msgs)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -48,27 +48,21 @@ find_package(catkin REQUIRED COMPONENTS sensor_msgs std_msgs geometry_msgs v4r_o
 
 ## Generate services in the 'srv' folder
  add_service_files(
-   FILES
-  segment_and_classify.srv
-  classify.srv
-  mv_classify.srv
+  FILES
+   retrain_recognizer.srv
+   recognize.srv
+   get_configuration.srv
  )
 
-## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
-  DEPENDENCIES
-  sensor_msgs
-  std_msgs
-  geometry_msgs
-  v4r_object_perception_msgs
-)
+   DEPENDENCIES
+   std_msgs
+   sensor_msgs
+   geometry_msgs  # Or other packages containing msgs
+   v4r_object_perception_msgs
+ )
 
 ###################################
 ## catkin specific configuration ##
@@ -81,34 +75,11 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES v4r_classifier_msgs
-#  CATKIN_DEPENDS other_catkin_pkg
+#  LIBRARIES v4r_object_recognition_msgs
+  CATKIN_DEPENDS v4r_object_perception_msgs
 #  DEPENDS system_lib
 )
 
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
-
-## Declare a cpp library
-# add_library(v4r_classifier_msgs
-#   src/${PROJECT_NAME}/v4r_classifier_msgs.cpp
-# )
-
-## Declare a cpp executable
-# add_executable(v4r_classifier_msgs_node src/v4r_classifier_msgs_node.cpp)
-
-## Add cmake target dependencies of the executable/library
-## as an example, message headers may need to be generated before nodes
-# add_dependencies(v4r_classifier_msgs_node v4r_classifier_msgs_generate_messages_cpp)
-
-## Specify libraries to link a library or executable target against
-# target_link_libraries(v4r_classifier_msgs_node
-#   ${catkin_LIBRARIES}
 # )
 
 #############
@@ -126,7 +97,7 @@ catkin_package(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS v4r_classifier_msgs v4r_classifier_msgs_node
+# install(TARGETS v4r_object_recognition_msgs v4r_object_recognition_msgs_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -151,7 +122,7 @@ catkin_package(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_v4r_classifier_msgs.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_v4r_object_recognition_msgs.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

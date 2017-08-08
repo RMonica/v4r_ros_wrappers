@@ -17,7 +17,7 @@
 
 #include <v4r/io/filesystem.h>
 
-#include "v4r_recognition_msgs/recognize.h"
+#include "v4r_object_recognition_msgs/recognize.h"
 #include "v4r_object_tracker_msgs/change_tracking_model.h"
 #include "v4r_object_tracker_msgs/cleanup.h"
 #include "v4r_object_tracker_msgs/start_tracker.h"
@@ -45,7 +45,7 @@ public:
     void callUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
         std::cout << "Received point cloud.\n" << std::endl;
-        v4r_recognition_msgs::recognize srv;
+        v4r_object_recognition_msgs::recognize srv;
         srv.request.cloud = *msg;
 
         if (!sv_rec_client_.call(srv)) { ROS_ERROR("Failed to call /recognition_service/sv_recognition"); return; }
@@ -124,7 +124,7 @@ public:
         n_ = new ros::NodeHandle ( "~" );
 
         std::string service_name_sv_rec = "/recognition_service/";
-        sv_rec_client_ = n_->serviceClient<v4r_recognition_msgs::recognize>(service_name_sv_rec + "sv_recognition");
+        sv_rec_client_ = n_->serviceClient<v4r_object_recognition_msgs::recognize>(service_name_sv_rec + "sv_recognition");
 
         std::string service_name_obj_tracker = "/object_tracker/";
         obj_track_start_ = n_->serviceClient<v4r_object_tracker_msgs::start_tracker>(service_name_obj_tracker + "start_recording");

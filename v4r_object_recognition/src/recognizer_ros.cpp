@@ -12,8 +12,8 @@ namespace v4r
 {
 template<typename PointT>
 bool
-RecognizerROS<PointT>::respondSrvCall(v4r_recognition_msgs::recognize::Request &req,
-                                      v4r_recognition_msgs::recognize::Response &response) const
+RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Request &req,
+                                      v4r_object_recognition_msgs::recognize::Response &response) const
 {
     typename pcl::PointCloud<PointT>::Ptr pRecognizedModels (new pcl::PointCloud<PointT>);
 
@@ -168,8 +168,8 @@ RecognizerROS<PointT>::respondSrvCall(v4r_recognition_msgs::recognize::Request &
 
 template<typename PointT>
 bool
-RecognizerROS<PointT>::recognizeROS(v4r_recognition_msgs::recognize::Request &req,
-                                    v4r_recognition_msgs::recognize::Response &response)
+RecognizerROS<PointT>::recognizeROS(v4r_object_recognition_msgs::recognize::Request &req,
+                                    v4r_object_recognition_msgs::recognize::Response &response)
 {
     scene_.reset(new pcl::PointCloud<PointT>());
     pcl::fromROSMsg (req.cloud, *scene_);

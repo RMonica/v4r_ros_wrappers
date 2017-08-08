@@ -42,16 +42,16 @@
   <buildtool_depend>catkin</buildtool_depend>
   <run_depend>v4r_camera_tracker</run_depend>
   <run_depend>v4r_camera_tracker_msgs</run_depend>
-  <run_depend>v4r_classifier_msgs</run_depend>
+  <run_depend>v4r_object_classification_msgs</run_depend>
 <!--
   <run_depend>multiview_object_recognizer</run_depend>
 -->
-  <run_depend>v4r_object_classifier</run_depend>
+  <run_depend>v4r_object_classification</run_depend>
   <run_depend>v4r_object_perception_msgs</run_depend>
-  <run_depend>v4r_recognition_msgs</run_depend>
+  <run_depend>v4r_object_recognition_msgs</run_depend>
   <run_depend>v4r_segmentation</run_depend>
   <run_depend>v4r_segmentation_msgs</run_depend>
-  <run_depend>v4r_singleview_object_recognizer</run_depend>
+  <run_depend>v4r_object_recognition</run_depend>
   <run_depend>v4r_segment_and_classify</run_depend>
 
 

@@ -1,6 +1,6 @@
-#include "v4r_recognition_msgs/get_configuration.h"
-#include "v4r_recognition_msgs/recognize.h"
-#include "v4r_recognition_msgs/retrain_recognizer.h"
+#include "v4r_object_recognition_msgs/get_configuration.h"
+#include "v4r_object_recognition_msgs/recognize.h"
+#include "v4r_object_recognition_msgs/retrain_recognizer.h"
 
 #include <image_transport/image_transport.h>
 #include <v4r/apps/ObjectRecognizer.h>
@@ -24,14 +24,14 @@ private:
     typename pcl::PointCloud<PointT>::Ptr scene_; ///< input cloud
     mutable v4r::Camera::Ptr camera_; ///< camera (if cloud is not organized)
 
-    bool respondSrvCall(v4r_recognition_msgs::recognize::Request &req, v4r_recognition_msgs::recognize::Response &response) const;
+    bool respondSrvCall(v4r_object_recognition_msgs::recognize::Request &req, v4r_object_recognition_msgs::recognize::Response &response) const;
 
 public:
     RecognizerROS()
     {}
 
-    bool recognizeROS (v4r_recognition_msgs::recognize::Request & req,
-                       v4r_recognition_msgs::recognize::Response & response);
+    bool recognizeROS (v4r_object_recognition_msgs::recognize::Request & req,
+                       v4r_object_recognition_msgs::recognize::Response & response);
 
     bool initialize (int argc, char ** argv);
 

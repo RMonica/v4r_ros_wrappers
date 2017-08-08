@@ -8,8 +8,8 @@
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
 
-#include "v4r_classifier_msgs/segment_and_classify.h"
-#include "v4r_classifier_msgs/classify.h"
+#include "v4r_object_classification_msgs/segment_and_classify.h"
+#include "v4r_object_classification_msgs/classify.h"
 #include "v4r_object_perception_msgs/classification.h"
 #include <v4r/recognition/global_recognizer.h>
 
@@ -33,8 +33,8 @@ public:
     ClassifierROS()
     { }
 
-    bool classify(v4r_classifier_msgs::classify::Request &req,
-                     v4r_classifier_msgs::classify::Response &response);
+    bool classify(v4r_object_classification_msgs::classify::Request &req,
+                     v4r_object_classification_msgs::classify::Response &response);
 
     void initialize (int argc, char ** argv);
 
