@@ -20,7 +20,7 @@ move_debian_packages
 }
 
 release_dependency_packages() {
-for i in v4r_object_tracker v4r_object_classifier v4r_segmentation v4r_singleview_object_recognizer; do 
+for i in v4r_object_tracker v4r_object_classification v4r_segmentation v4r_object_recognition; do 
 	cd $i && \
 	create_debian_package
 	cd ..;
@@ -30,7 +30,7 @@ move_debian_packages
 }
 
 release_ros_wrappers() {
-for i in `ls -d */|grep -v 'rosdep\|images\|msgs\|v4r_ros_wrappers\|multiview'`; do
+for i in `ls -d */|grep -v 'rosdep\|images\|msgs\|v4r_ros_wrappers'`; do
 	cd $i && \
 	create_debian_package
 	cd ..;

@@ -82,7 +82,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES v4r_object_classification_msgs
-#  CATKIN_DEPENDS other_catkin_pkg
+  CATKIN_DEPENDS message_runtime std_msgs geometry_msgs sensor_msgs v4r_object_perception_msgs
 #  DEPENDS system_lib
 )
 
