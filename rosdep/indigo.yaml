@@ -1,0 +1,44 @@
+# V4R library
+
+v4r:
+  ubuntu: v4r
+
+# V4R ROS wrappers and msg/srv/action definitions
+
+v4r_camera_tracker_msgs:
+  ubuntu: ros-indigo-v4r-camera-tracker-msgs
+v4r_object_classification_msgs:
+  ubuntu: ros-indigo-v4r-object-classification-msgs
+v4r_incremental_object_learning_msgs:
+  ubuntu: ros-indigo-v4r-incremental-object-learning-msgs
+v4r_object_tracker_msgs:
+  ubuntu: ros-indigo-v4r-object-tracker-msgs
+v4r_object_recognition_msgs:
+  ubuntu: ros-indigo-v4r-object-recognition-msgs
+v4r_segmentation_msgs:
+  ubuntu: ros-indigo-v4r-segmentation-msgs
+v4r_object_perception_msgs:
+  ubuntu: ros-indigo-v4r-object-perception-msgs
+v4r_camera_tracker:
+  ubuntu: ros-indigo-v4r-object-tracker
+v4r_incremental_object_learning:
+  ubuntu: ros-indigo-v4r-incremental-object-learning
+v4r_object_classification:
+  ubuntu: ros-indigo-v4r-object-classification
+v4r_object_detection_and_tracking:
+  ubuntu: ros-indigo-v4r-object-detection-and-tracking
+v4r_object_gestalt_segmentation:
+  ubuntu: ros-indigo-v4r-object-gestalt-segmentation
+v4r_object_tracker:
+  ubuntu: ros-indigo-v4r-object-tracker
+v4r_segment_and_classify:
+  ubuntu: ros-indigo-v4r-segment-and-classify
+v4r_segmentation:
+  ubuntu: ros-indigo-v4r-segmentation
+v4r_object_recognition:
+  ubuntu: ros-indigo-v4r-object-recognition
+v4r_temporal_filtering:
+  ubuntu: ros-indigo-v4r-temporal-filtering
+v4r_ros_wrappers:
+  ubuntu: ros-indigo-v4r-ros-wrappers
+
