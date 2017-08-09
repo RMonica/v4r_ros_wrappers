@@ -106,16 +106,16 @@ rosrun object_recognizer recognition_service -m /path/to/your/model/data
 ```
 Please read the tutorial in the V4R library about the usage of the recognizer. The ROS version expects the same parameter input as the stand alone recognizer of the V4R library. *Therefore it is also required that you run the node from a working directory that also contains the config folder `./cfg`of the recognizer!*
 
-The recogniser offers a service `/recognition_service/sv_recognition`, defined in `v4r_ros_wrappers/recognition_srv_definitions/srv`.
+The recogniser offers a service `/recognition_service/object_recognition`, defined in `v4r_ros_wrappers/v4r_object_recognition_msgs/srv`.
 It expects an input point cloud and optionally a camera pose that aligns the point cloud in a common reference frame (if multi-view recognition is enabled in the config file). The recognizer returns a vector of ids (the name you gave during modelling), transforms (the 6D object poses), as well as confidences, bounding boxes and the segmented point clouds corresponding to the recognised portions of the scene.
 
 There is a test ROS component for you as an example:
 ```
-rosrun object_recognizer test_object_recognition_from_file _topic:=/camera/depth_registered/points
+rosrun v4r_object_recognition test_object_recognition_from_file _topic:=/camera/depth_registered/points
 ```
 where you have to set the topic to the respective RGB-D source of your robot, e.g. the head_xtion. Alternatively, you can also test the recognizer from local pcd files.
 ```
-rosrun object_recognizer test_object_recognition_from_file _input_method:=1 _test_dir:=/my_path/to/dataset/test_set/set_00001/
+rosrun v4r_object_recognition test_object_recognition_from_file _input_method:=1 _test_dir:=/my_path/to/dataset/test_set/set_00001/
 ```
 
 The recogniser publishes visualization information.
