@@ -1,7 +1,5 @@
-sensor_msgs/PointCloud2 cloud
-float32[] transform #optional transform to world coordinate system
-std_msgs/String scene_name #optional name for multiview recognition
-std_msgs/String view_name #optional name for multiview recognition
+sensor_msgs/PointCloud2 cloud 
+geometry_msgs/Transform transform #optional transform to global reference frame (required if multi-view recognition is enabled)
 ---
 std_msgs/String[] ids
 geometry_msgs/Transform[] transforms

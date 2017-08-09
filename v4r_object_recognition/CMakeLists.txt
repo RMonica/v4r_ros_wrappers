@@ -29,10 +29,10 @@ link_directories(${V4R_3RDPARTY_LIB_DIR_OPT})
 set(incs include/recognizer_ros.h)
 
 add_executable(recognition_service src/recognizer_ros.cpp ${incs})
-add_executable(test_single_view_recognition src/test_single_view_recognizer.cpp)
+add_executable(test_object_recognition src/test_object_recognizer.cpp)
 
 add_dependencies(recognition_service ${catkin_EXPORTED_TARGETS})
-add_dependencies(test_single_view_recognition ${catkin_EXPORTED_TARGETS})
+add_dependencies(test_object_recognition ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(recognition_service
    ${catkin_LIBRARIES}
@@ -41,7 +41,7 @@ target_link_libraries(recognition_service
    ${V4R_LIBS}
 )
 
-target_link_libraries(test_single_view_recognition
+target_link_libraries(test_object_recognition
    ${catkin_LIBRARIES}
    ${PCL_LIBRARIES}
    ${V4R_LIBS}
@@ -55,7 +55,7 @@ LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(TARGETS test_single_view_recognition
+install(TARGETS test_object_recognition
 ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
