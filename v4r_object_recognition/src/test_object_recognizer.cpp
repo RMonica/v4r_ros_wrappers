@@ -15,12 +15,13 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 
+#include <v4r/common/miscellaneous.h>
 #include <v4r/common/pcl_opencv.h>
 #include <v4r/io/filesystem.h>
 
 #include "v4r_object_recognition_msgs/recognize.h"
 
-class SingleViewRecognizerDemo
+class ObjectRecognizerDemo
 {
 private:
     typedef pcl::PointXYZRGB PointT;
@@ -34,16 +35,22 @@ private:
     image_transport::Publisher image_pub_;
 
 public:
-    SingleViewRecognizerDemo()
-    {
-        input_method_ = 0;
-    }
+    ObjectRecognizerDemo()
+        :input_method_(0)
+    {}
 
     void callSvRecognizerUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
         std::cout << "Received point cloud.\n" << std::endl;
         v4r_object_recognition_msgs::recognize srv;
         srv.request.cloud = *msg;
+
+        geometry_msgs::Vector3 t;
+        geometry_msgs::Quaternion q;
+        q.x = q.y = q.z = t.x = t.y = t.z = 0.;
+        q.w = 1.;
+        srv.request.transform.translation = t;
+        srv.request.transform.rotation = q;
 
         if (sv_rec_client_.call(srv))
         {
@@ -72,7 +79,7 @@ public:
 
     bool checkKinect ()
     {
-        ros::Subscriber sub_pc = n_->subscribe (topic_, 1, &SingleViewRecognizerDemo::checkCloudArrive, this);
+        ros::Subscriber sub_pc = n_->subscribe (topic_, 1, &ObjectRecognizerDemo::checkCloudArrive, this);
         ros::Rate loop_rate (1);
         size_t kinect_trials_ = 0;
 
@@ -120,10 +127,20 @@ public:
         {
             pcl::PointCloud<PointT> cloud;
             pcl::io::loadPCDFile(directory_ + "/" + test_cloud[i], cloud);
+            const Eigen::Quaternionf &q = cloud.sensor_orientation_;
+            const Eigen::Vector4f &t = cloud.sensor_origin_;
+
             sensor_msgs::PointCloud2 cloud_ros;
             pcl::toROSMsg(cloud, cloud_ros);
             v4r_object_recognition_msgs::recognize srv_rec;
             srv_rec.request.cloud = cloud_ros;
+            srv_rec.request.transform.translation.x = t(0);
+            srv_rec.request.transform.translation.y = t(1);
+            srv_rec.request.transform.translation.z = t(2);
+            srv_rec.request.transform.rotation.x = q.x();
+            srv_rec.request.transform.rotation.y = q.y();
+            srv_rec.request.transform.rotation.z = q.z();
+            srv_rec.request.transform.rotation.w = q.w();
 
             if (sv_rec_client_.call(srv_rec))
             {
@@ -131,7 +148,8 @@ public:
 
                 if(detected_ids.empty())
                     std::cout << "I did not detected any object from the model database in the current scene." << std::endl;
-                else {
+                else
+                {
                     std::cout << "I detected: " << std::endl;
                     for(const auto &id:detected_ids)
                         std::cout << "  " << id.data << std::endl;
@@ -149,13 +167,13 @@ public:
 
     bool initialize(int argc, char ** argv)
     {
-        ros::init (argc, argv, "SingleViewRecognizerDemo");
+        ros::init (argc, argv, "ObjectRecognizerDemo");
         n_ = new ros::NodeHandle ( "~" );
 
-        std::string service_name_sv_rec = "/recognition_service/sv_recognition";
+        std::string service_name_sv_rec = "/recognition_service/object_recognition";
         sv_rec_client_ = n_->serviceClient<v4r_object_recognition_msgs::recognize>(service_name_sv_rec);
         it_.reset(new image_transport::ImageTransport(*n_));
-        image_pub_ = it_->advertise("/mp_recognition/debug_image", 1, true);
+        image_pub_ = it_->advertise("/object_recognition/debug_image", 1, true);
 
         n_->getParam ( "input_method", input_method_ );
 
@@ -172,7 +190,7 @@ public:
             if ( checkKinect() )
             {
                 std::cout << "Camera (topic: " << topic_ << ") is up and running." << std::endl;
-                ros::Subscriber sub_pc = n_->subscribe (topic_, 1, &SingleViewRecognizerDemo::callSvRecognizerUsingCam, this);
+                ros::Subscriber sub_pc = n_->subscribe (topic_, 1, &ObjectRecognizerDemo::callSvRecognizerUsingCam, this);
                 ros::spin();
             }
             else
@@ -200,7 +218,7 @@ public:
 int
 main (int argc, char ** argv)
 {
-    SingleViewRecognizerDemo m;
+    ObjectRecognizerDemo m;
     m.initialize(argc, argv);
     return 0;
 }

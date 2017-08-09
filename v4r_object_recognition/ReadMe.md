@@ -1,12 +1,12 @@
 ##usage:
-`rosrun singleview_object_recognizer recognition_service -m /path/to/your/models/ [--optional_parameter p]`
+`rosrun v4r_object_recognition recognition_service -m /path/to/your/models/ [--optional_parameter p]`
 
 ##params (see extended help output with -h)::
 *	models\_dir [in] - Directory containing 3D models (saved as *.pcd files)
 *	chop\_z [in] - cut of distance in meters with respect to the camera
 	
 ##Test:
-`rosrun singleview_object_recognizer test_single_view_recognition [_optional_parameter:=p]` 
+`rosrun v4r_object_recognition test_single_view_recognition [_optional_parameter:=p]` 
 
 ##Test params (NOTE THAT THESE ARE ROS PARAMETERS):
 *  input\_method[in] (default: 0) - 0=camera input; 1 = input from disk

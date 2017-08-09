@@ -173,6 +173,9 @@ RecognizerROS<PointT>::recognizeROS(v4r_object_recognition_msgs::recognize::Requ
 {
     scene_.reset(new pcl::PointCloud<PointT>());
     pcl::fromROSMsg (req.cloud, *scene_);
+    scene_->sensor_orientation_ = Eigen::Quaternionf( req.transform.rotation.w, req.transform.rotation.x, req.transform.rotation.y, req.transform.rotation.z );
+    scene_->sensor_origin_ = Eigen::Vector4f( req.transform.translation.x, req.transform.translation.y, req.transform.translation.z, 0.f ); ///NOTE: In PCL the last component always seems to be set to 0. Not sure what it does though. Behaves differently if set to 1.
+
     object_hypotheses_ = mrec_->recognize( scene_ );
 
     for(size_t ohg_id=0; ohg_id<object_hypotheses_.size(); ohg_id++)
@@ -214,42 +217,6 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
             return false;
         }
 
-//        std::string hv_config_xml;
-//        if( n_->getParam ( "hv_config_xml", hv_config_xml ) )
-//        {
-//            arguments.push_back("--hv_config_xml");
-//            arguments.push_back(hv_config_xml);
-//        }
-//        std::string sift_config_xml;
-//        if( n_->getParam ( "sift_config_xml", sift_config_xml ) )
-//        {
-//            arguments.push_back("--sift_config_xml");
-//            arguments.push_back(sift_config_xml);
-//        }
-//        std::string shot_config_xml;
-//        if( n_->getParam ( "shot_config_xml", shot_config_xml ) )
-//        {
-//            arguments.push_back("--shot_config_xml");
-//            arguments.push_back(shot_config_xml);
-//        }
-//        std::string esf_config_xml;
-//        if( n_->getParam ( "esf_config_xml", esf_config_xml ) )
-//        {
-//            arguments.push_back("--esf_config_xml");
-//            arguments.push_back(esf_config_xml);
-//        }
-//        std::string alexnet_config_xml;
-//        if( n_->getParam ( "alexnet_config_xml", alexnet_config_xml ) )
-//        {
-//            arguments.push_back("--alexnet_config_xml");
-//            arguments.push_back(alexnet_config_xml);
-//        }
-//        std::string camera_xml;
-//        if( n_->getParam ( "camera_xml", camera_xml ) )
-//        {
-//            arguments.push_back("--camera_xml");
-//            arguments.push_back(camera_xml);
-//        }
         std::string additional_arguments;
         if( n_->getParam ( "arg", additional_arguments ) )
         {
@@ -270,11 +237,11 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
 
     ROS_INFO("Ready to get service calls.");
 
-    vis_pc_pub_ = n_->advertise<sensor_msgs::PointCloud2>( "sv_recogniced_object_instances", 1 );
-    recognize_  = n_->advertiseService ("sv_recognition", &RecognizerROS::recognizeROS, this);
+    vis_pc_pub_ = n_->advertise<sensor_msgs::PointCloud2>( "recogniced_object_instances", 1 );
+    recognize_  = n_->advertiseService ("object_recognition", &RecognizerROS::recognizeROS, this);
 
     it_.reset(new image_transport::ImageTransport(*n_));
-    image_pub_ = it_->advertise("sv_recogniced_object_instances_img", 1, true);
+    image_pub_ = it_->advertise("recogniced_object_instances_img", 1, true);
 
     ROS_INFO("Ready to get service calls.");
     return true;

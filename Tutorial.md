@@ -102,37 +102,23 @@ With the models created above you can now call the object recognition service wi
 Start the object recogniser on the side PC with the head camera attached. To do this, you must SSH into the side PC *without* X forwarding then run:
 ```
 export DISPLAY=:0
-rosrun singleview_object_recognizer recognition_service -m /path/to/your/model/data
+rosrun object_recognizer recognition_service -m /path/to/your/model/data
 ```
-If you want to get a description about other parameters, just add -h to the command. The ones you might want to change are:
-* `-z 2.5` (will neglect all points further away than 2.5m - this will ensure the noise level of the measured points is not too high. Note that RGB-D data from the Asus or Kinect gets worse with distance)
-* `--knn_sift 3` (this will increase the number of generated hypotheses)
-* `--do_shot true` (this will enable SHOT feature extraction - necessary for objects without visual texture information)
-* `-c 5` (increase speed at the cost of possibly missing objects if they are e.g. half occluded.)
+Please read the tutorial in the V4R library about the usage of the recognizer. The ROS version expects the same parameter input as the stand alone recognizer of the V4R library. *Therefore it is also required that you run the node from a working directory that also contains the config folder `./cfg`of the recognizer!*
 
-The recogniser offers a service `/recognition_service/sv_recognition`, defined in `v4r_ros_wrappers/recognition_srv_definitions/srv`:
-```
-sensor_msgs/PointCloud2 cloud  # input scene point cloud
-float32[] transform            # optional transform to world coordinate system
-std_msgs/String scene_name     # optional name for multiview recognition
-std_msgs/String view_name      # optional name for multiview recognition
----
-std_msgs/String[] ids                 # name of the recognised object model
-geometry_msgs/Transform[] transforms  # 6D object pose
-float32[] confidence                  # ratio of visible points
-geometry_msgs/Point32[] centroid      # centroid of the cluster
-v4r_object_perception_msgs/BBox[] bbox    # bounding box of the cluster
-sensor_msgs/PointCloud2[] models_cloud  # point cloud of the model transformed into camera coordinates
-```
-For you, all you have to provide is a point cloud. The recogniser will return arrays of ids (the name you gave during modelling), transforms (the 6D object poses), as well as confidences, bounding boxes and the segmented point clouds corresponding to the recognised portions of the scene.
+The recogniser offers a service `/recognition_service/object_recognition`, defined in `v4r_ros_wrappers/v4r_object_recognition_msgs/srv`.
+It expects an input point cloud and optionally a camera pose that aligns the point cloud in a common reference frame (if multi-view recognition is enabled in the config file). The recognizer returns a vector of ids (the name you gave during modelling), transforms (the 6D object poses), as well as confidences, bounding boxes and the segmented point clouds corresponding to the recognised portions of the scene.
 
 There is a test ROS component for you as an example:
 ```
-rosrun singleview_object_recognizer test_single_view_recognition_from_file _topic:=/camera/depth_registered/points
+rosrun v4r_object_recognition test_object_recognition_from_file _topic:=/camera/depth_registered/points
 ```
-where you have to set the topic to the respective RGB-D source of your robot, e.g. the head_xtion.
+where you have to set the topic to the respective RGB-D source of your robot, e.g. the head_xtion. Alternatively, you can also test the recognizer from local pcd files.
+```
+rosrun v4r_object_recognition test_object_recognition_from_file _input_method:=1 _test_dir:=/my_path/to/dataset/test_set/set_00001/
+```
 
-The recogniser publishes visualisation information.
+The recogniser publishes visualization information.
 
 * `/recognition_service/sv_recogniced_object_instances_img`: displays the original image with overlaid bounding boxes of recognised objects
 * `/recognition_service/sv_recogniced_object_instances`: the model point clouds of the recognised objects, in the camera frame.
@@ -155,17 +141,8 @@ Useful aspects to learn are:
 * How false positive rate and confidence measure are related.
 
 ## Trouble shooting
-* If you get an error like this
-```
-terminate called after throwing an instance of 'flann::FLANNException'
-  what():  Saved index does not contain the dataset and no dataset was provided.
-[recognition_service-2] process has died [pid 17534, exit code -6, cmd /home/mz/work/STRANDS/code/catkin_ws/devel/lib/singleview_object_recognizer/recognition_service __name:=recognition_service __log:=/home/mz/.ros/log/61fb16b8-4afc-11e5-801d-503f56004d09/recognition_service-2.log].
-log file: /home/mz/.ros/log/61fb16b8-4afc-11e5-801d-503f56004d09/recognition_service-2*.log
-```
-locate the file `sift_flann.idx`, probably right in your catkin workspace or in `~/.ros`, and remove it.
-Do the same if you get some `vector::_M_range_check` error. In case you enable SHOT, please also remove `shot_omp_flann.idx`. 
 
-* Please also make sure that your camera uses VGA resolution for both RGB and depth. You can check the values for `color_mode` and `depth_mode` in `rosrun rqt_reconfigure rqt_reconfigure` (camera -> driver).
+* Please make sure that your camera uses VGA resolution for both RGB and depth. You can check the values for `color_mode` and `depth_mode` in `rosrun rqt_reconfigure rqt_reconfigure` (camera -> driver).
 
 * Also ensure you turned on depth\_registration (i.e. start the camera with `roslaunch openni2_launch openni2.launch depth_registration:=true`)
 
