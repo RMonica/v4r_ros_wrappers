@@ -48,7 +48,6 @@ mv *deb .build/
 }
 
 release_package() {
-release_dependency_messages
 release_messages
 release_dependency_packages
 release_ros_wrappers
