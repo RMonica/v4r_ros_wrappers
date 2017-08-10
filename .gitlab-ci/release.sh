@@ -7,11 +7,6 @@ done
 dpkg -i ros-*msgs*_amd64.deb > /dev/null
 }
 
-release_dependency_messages() {
-dpkg -i ros-*_amd64.deb > /dev/null
-move_debian_packages
-}
-
 release_dependency_packages() {
 for i in v4r_object_tracker v4r_object_classification v4r_segmentation v4r_object_recognition; do 
 	create_debian_package "$i"
