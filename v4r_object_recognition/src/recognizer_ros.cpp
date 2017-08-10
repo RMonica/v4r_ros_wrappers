@@ -95,16 +95,17 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
             Eigen::Vector4f max;
             pcl::getMinMax3D (*model_aligned, min, max);
 
-            v4r_object_perception_msgs::BBox bbox;
+            geometry_msgs::Polygon bbox;
+            bbox.points.resize(8);
             geometry_msgs::Point32 pt;
-            pt.x = min[0]; pt.y = min[1]; pt.z = min[2]; bbox.point.push_back(pt);
-            pt.x = min[0]; pt.y = min[1]; pt.z = max[2]; bbox.point.push_back(pt);
-            pt.x = min[0]; pt.y = max[1]; pt.z = min[2]; bbox.point.push_back(pt);
-            pt.x = min[0]; pt.y = max[1]; pt.z = max[2]; bbox.point.push_back(pt);
-            pt.x = max[0]; pt.y = min[1]; pt.z = min[2]; bbox.point.push_back(pt);
-            pt.x = max[0]; pt.y = min[1]; pt.z = max[2]; bbox.point.push_back(pt);
-            pt.x = max[0]; pt.y = max[1]; pt.z = min[2]; bbox.point.push_back(pt);
-            pt.x = max[0]; pt.y = max[1]; pt.z = max[2]; bbox.point.push_back(pt);
+            pt.x = min[0]; pt.y = min[1]; pt.z = min[2]; bbox.points[0] = pt;
+            pt.x = min[0]; pt.y = min[1]; pt.z = max[2]; bbox.points[1] = pt;
+            pt.x = min[0]; pt.y = max[1]; pt.z = min[2]; bbox.points[2] = pt;
+            pt.x = min[0]; pt.y = max[1]; pt.z = max[2]; bbox.points[3] = pt;
+            pt.x = max[0]; pt.y = min[1]; pt.z = min[2]; bbox.points[4] = pt;
+            pt.x = max[0]; pt.y = min[1]; pt.z = max[2]; bbox.points[5] = pt;
+            pt.x = max[0]; pt.y = max[1]; pt.z = min[2]; bbox.points[6] = pt;
+            pt.x = max[0]; pt.y = max[1]; pt.z = max[2]; bbox.points[7] = pt;
             response.bbox.push_back(bbox);
 
             if(!camera_)

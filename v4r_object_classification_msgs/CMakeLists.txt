@@ -4,7 +4,7 @@ project(v4r_object_classification_msgs)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS sensor_msgs std_msgs geometry_msgs v4r_object_perception_msgs message_generation)
+find_package(catkin REQUIRED COMPONENTS sensor_msgs std_msgs geometry_msgs message_generation)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -39,19 +39,18 @@ find_package(catkin REQUIRED COMPONENTS sensor_msgs std_msgs geometry_msgs v4r_o
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+# Generate messages in the 'msg' folder
+ add_message_files(
+   FILES
+   StringArray.msg
+ )
 
 ## Generate services in the 'srv' folder
  add_service_files(
    FILES
   segment_and_classify.srv
   classify.srv
-  mv_classify.srv
+#  mv_classify.srv
  )
 
 ## Generate actions in the 'action' folder
@@ -67,7 +66,6 @@ generate_messages(
   sensor_msgs
   std_msgs
   geometry_msgs
-  v4r_object_perception_msgs
 )
 
 ###################################
@@ -82,7 +80,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES v4r_object_classification_msgs
-  CATKIN_DEPENDS message_runtime std_msgs geometry_msgs sensor_msgs v4r_object_perception_msgs
+  CATKIN_DEPENDS message_runtime std_msgs geometry_msgs sensor_msgs
 #  DEPENDS system_lib
 )
 

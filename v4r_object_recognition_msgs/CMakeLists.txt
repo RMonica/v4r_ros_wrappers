@@ -4,7 +4,7 @@ project(v4r_object_recognition_msgs)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS sensor_msgs std_msgs geometry_msgs v4r_object_perception_msgs message_generation)
+find_package(catkin REQUIRED COMPONENTS sensor_msgs std_msgs geometry_msgs message_generation)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -61,7 +61,6 @@ generate_messages(
    std_msgs
    sensor_msgs
    geometry_msgs  # Or other packages containing msgs
-   v4r_object_perception_msgs
  )
 
 ###################################
@@ -76,7 +75,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES v4r_object_recognition_msgs
-  CATKIN_DEPENDS v4r_object_perception_msgs
+#  CATKIN_DEPENDS 
 #  DEPENDS system_lib
 )
 

@@ -44,7 +44,6 @@
   <run_depend>v4r_camera_tracker_msgs</run_depend>
   <run_depend>v4r_object_classification</run_depend>
   <run_depend>v4r_object_classification_msgs</run_depend>
-  <run_depend>v4r_object_perception_msgs</run_depend>
   <run_depend>v4r_object_recognition</run_depend>
   <run_depend>v4r_object_recognition_msgs</run_depend>
   <run_depend>v4r_segmentation</run_depend>

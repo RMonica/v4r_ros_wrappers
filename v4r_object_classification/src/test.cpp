@@ -15,7 +15,6 @@
 #include "v4r_object_classification_msgs/segment_and_classify.h"
 #include "v4r_object_classification_msgs/classify.h"
 #include "v4r_segmentation_msgs/segment.h"
-#include "v4r_object_perception_msgs/classification.h"
 #include "geometry_msgs/Point32.h"
 
 class SOCDemo
@@ -30,7 +29,9 @@ private:
     ros::NodeHandle *n_;
     bool visualize_output_;
     std::vector< std_msgs::Int32MultiArray> cluster_indices_ros_;
-    std::vector< v4r_object_perception_msgs::classification> class_results_ros_;
+    std::vector< std::vector< std::string > > class_results_;
+    std::vector< std::vector< float > > confidences_;
+
     std::vector< geometry_msgs::Point32> cluster_centroids_ros_;
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr scene_;
     pcl::PointCloud<pcl::PointXYZ>::Ptr sceneXYZ_;
@@ -95,7 +96,23 @@ private:
         srv.request.clusters_indices = cluster_indices_ros_;
         if (classifierClient.call(srv))
         {
-            class_results_ros_ = srv.response.class_results;
+            size_t num_clusters = srv.response.category_ids.size();
+            class_results_.resize( num_clusters );
+            confidences_.resize( num_clusters );
+            for(size_t i=0; i<num_clusters; i++)
+            {
+                const v4r_object_classification_msgs::StringArray &ids = srv.response.category_ids[i];
+
+                size_t num_classes = ids.data.size();
+                class_results_[i].resize( num_classes );
+                confidences_[i].resize( num_classes );
+                for(size_t j=0; j<num_classes; j++)
+                {
+                    class_results_[i][j] = ids.data[j];
+                    confidences_[i][j] = srv.response.confidences[i].data[j];
+                }
+            }
+
             cluster_indices_ros_ = srv.response.clusters_indices;
             cluster_centroids_ros_ = srv.response.centroid;
         }
@@ -114,7 +131,23 @@ private:
         srv.request.cloud = *msg;
         if (segAndClassifierClient.call(srv))
         {
-            class_results_ros_ = srv.response.class_results;
+            size_t num_clusters = srv.response.category_ids.size();
+            class_results_.resize( num_clusters );
+            confidences_.resize( num_clusters );
+            for(size_t i=0; i<num_clusters; i++)
+            {
+                const v4r_object_classification_msgs::StringArray &ids = srv.response.category_ids[i];
+
+                size_t num_classes = ids.data.size();
+                class_results_[i].resize( num_classes );
+                confidences_[i].resize( num_classes );
+                for(size_t j=0; j<num_classes; j++)
+                {
+                    class_results_[i][j] = ids.data[j];
+                    confidences_[i][j] = srv.response.confidences[i].data[j];
+                }
+            }
+
             cluster_indices_ros_ = srv.response.clusters_indices;
         }
         else
@@ -211,43 +244,15 @@ public:
         {
             vis_.reset(new pcl::visualization::PCLVisualizer("classifier visualization"));
         }
-        vis_->addCoordinateSystem(0.2f, 0);
+
         float text_scale = 0.010f;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr pClassifiedPCl (new pcl::PointCloud<pcl::PointXYZRGB>());
         pcl::copyPointCloud(*sceneXYZ_, *pClassifiedPCl);
         vis_->removeAllPointClouds();
-        //for(size_t kk=0; kk < text_3d_.size(); kk++)
-        //{
-            //vis_->removeShape(text_3d_[kk]);
-        //}
+
         text_3d_.clear();
         vis_->removeAllShapes();
         vis_->addPointCloud(sceneXYZ_, "scene_cloud");
-        /*
-                //show table plane
-                std::vector<int> plane_indices;
-                for(size_t i=0; i < frame->points.size(); i++)
-                {
-                Eigen::Vector3f xyz_p = frame->points[i].getVector3fMap ();
-
-                if (!pcl_isfinite (xyz_p[0]) || !pcl_isfinite (xyz_p[1]) || !pcl_isfinite (xyz_p[2]))
-                  continue;
-
-                float val = xyz_p[0] * table_plane[0] + xyz_p[1] * table_plane[1] + xyz_p[2] * table_plane[2] + table_plane[3];
-
-                if (val <= tolerance && val >= -tolerance)
-                {
-                  plane_indices.push_back(i);
-                }
-                }
-
-                pcl::PointCloud<PointT>::Ptr plane (new pcl::PointCloud<PointT>);
-                pcl::copyPointCloud(*frame, plane_indices, *plane);
-
-                pcl::visualization::PointCloudColorHandlerCustom<PointT> random_handler (plane, 0, 255, 0);
-                vis_->addPointCloud<PointT> (plane, random_handler, "table plane");
-                vis_->spinOnce();
-                */
 
         for(size_t i=0; i < cluster_indices_ros_.size(); i++)
         {
@@ -261,18 +266,18 @@ public:
                 pClassifiedPCl->at(cluster_indices_ros_[i].data[kk]).b = b;
             }
             std::stringstream cluster_name;
-            if(class_results_ros_[i].class_type.size() > 0)
+            if( !class_results_[i].empty() )
             {
-                cluster_name << "#" << i << ": " << class_results_ros_[i].class_type[0].data;
+                cluster_name << "#" << i << ": " << class_results_[i][0];
                 std::cout << "Cluster " << i << ": " << std::endl;
-                for (size_t kk = 0; kk < class_results_ros_[i].class_type.size(); kk++)
+                for (size_t kk = 0; kk < class_results_[i].size(); kk++)
                 {
-                    std::cout << class_results_ros_[i].class_type[kk].data <<
-                                 " [" << class_results_ros_[i].confidence[kk] << "]" << std::endl;
+                    std::cout << class_results_[i][kk] <<
+                                 " [" << confidences_[i][kk] << "]" << std::endl;
 
                     std::stringstream prob_str;
                     prob_str.precision (2);
-                    prob_str << class_results_ros_[i].class_type[kk].data << " [" << class_results_ros_[i].confidence[kk] << "]";
+                    prob_str << class_results_[i][kk] << " [" << confidences_[i][kk] << "]";
 
                     std::stringstream cluster_text;
                     cluster_text << "cluster_" << i << "_" << kk << "_text";

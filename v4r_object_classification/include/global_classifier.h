@@ -10,7 +10,6 @@
 
 #include "v4r_object_classification_msgs/segment_and_classify.h"
 #include "v4r_object_classification_msgs/classify.h"
-#include "v4r_object_perception_msgs/classification.h"
 #include <v4r/recognition/global_recognizer.h>
 
 namespace v4r

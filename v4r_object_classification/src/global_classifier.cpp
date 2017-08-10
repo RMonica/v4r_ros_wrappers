@@ -31,6 +31,8 @@
 
 #include <fstream>
 #include <sstream>
+#include <geometry_msgs/Point32.h>
+#include <v4r_object_classification_msgs/StringArray.h>
 
 
 namespace po = boost::program_options;
@@ -81,16 +83,16 @@ ClassifierROS<PointT>::classify (v4r_object_classification_msgs::classify::Reque
 
         std::cout << "for cluster " << cluster_id << " with size " << cluster_indices.size() << ", I have following hypotheses: " << std::endl;
 
-        v4r_object_perception_msgs::classification class_tmp;
+        v4r_object_classification_msgs::StringArray class_results;
+        std_msgs::Float32MultiArray class_confidences;
         for(typename ObjectHypothesis::Ptr oh : ohs)
         {
+            class_results.data.push_back(oh->model_id_);
+            class_confidences.data.push_back(oh->confidence_);
             std::cout << oh->model_id_ << " with confidence " << oh->confidence_ << std::endl;
-            std_msgs::String str_tmp;
-            str_tmp.data = oh->model_id_;
-            class_tmp.class_type.push_back(str_tmp);
-            class_tmp.confidence.push_back( oh->confidence_ );
         }
-        response.class_results.push_back(class_tmp);
+        response.category_ids.push_back(class_results);
+        response.confidences.push_back(class_confidences);
 
         Eigen::Vector4f centroid;
         Eigen::Matrix3f covariance_matrix;
@@ -126,16 +128,17 @@ ClassifierROS<PointT>::classify (v4r_object_classification_msgs::classify::Reque
         Eigen::Vector4f max;
         pcl::getMinMax3D (*cloud_, cluster_indices, min, max);
 
-        v4r_object_perception_msgs::BBox bbox;
+        geometry_msgs::Polygon bbox;
+        bbox.points.resize(8);
         geometry_msgs::Point32 pt;
-        pt.x = min[0]; pt.y = min[1]; pt.z = min[2]; bbox.point.push_back(pt);
-        pt.x = min[0]; pt.y = min[1]; pt.z = max[2]; bbox.point.push_back(pt);
-        pt.x = min[0]; pt.y = max[1]; pt.z = min[2]; bbox.point.push_back(pt);
-        pt.x = min[0]; pt.y = max[1]; pt.z = max[2]; bbox.point.push_back(pt);
-        pt.x = max[0]; pt.y = min[1]; pt.z = min[2]; bbox.point.push_back(pt);
-        pt.x = max[0]; pt.y = min[1]; pt.z = max[2]; bbox.point.push_back(pt);
-        pt.x = max[0]; pt.y = max[1]; pt.z = min[2]; bbox.point.push_back(pt);
-        pt.x = max[0]; pt.y = max[1]; pt.z = max[2]; bbox.point.push_back(pt);
+        pt.x = min[0]; pt.y = min[1]; pt.z = min[2]; bbox.points[0] = pt;
+        pt.x = min[0]; pt.y = min[1]; pt.z = max[2]; bbox.points[1] = pt;
+        pt.x = min[0]; pt.y = max[1]; pt.z = min[2]; bbox.points[2] = pt;
+        pt.x = min[0]; pt.y = max[1]; pt.z = max[2]; bbox.points[3] = pt;
+        pt.x = max[0]; pt.y = min[1]; pt.z = min[2]; bbox.points[4] = pt;
+        pt.x = max[0]; pt.y = min[1]; pt.z = max[2]; bbox.points[5] = pt;
+        pt.x = max[0]; pt.y = max[1]; pt.z = min[2]; bbox.points[6] = pt;
+        pt.x = max[0]; pt.y = max[1]; pt.z = max[2]; bbox.points[7] = pt;
         response.bbox.push_back(bbox);
 
         // getting the point cloud of the cluster
