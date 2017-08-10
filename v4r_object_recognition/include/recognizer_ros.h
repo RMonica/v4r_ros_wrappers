@@ -1,4 +1,3 @@
-#include "v4r_object_recognition_msgs/get_configuration.h"
 #include "v4r_object_recognition_msgs/recognize.h"
 #include "v4r_object_recognition_msgs/retrain_recognizer.h"
 
