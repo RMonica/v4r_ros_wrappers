@@ -8,9 +8,6 @@ dpkg -i ros-*msgs*_amd64.deb > /dev/null
 }
 
 release_dependency_messages() {
-for i in v4r_object_perception_msgs; do 
-	create_debian_package "$i"
-done
 dpkg -i ros-*_amd64.deb > /dev/null
 move_debian_packages
 }
