@@ -17,8 +17,6 @@ v4r_object_recognition_msgs:
   ubuntu: ros-indigo-v4r-object-recognition-msgs
 v4r_segmentation_msgs:
   ubuntu: ros-indigo-v4r-segmentation-msgs
-v4r_object_perception_msgs:
-  ubuntu: ros-indigo-v4r-object-perception-msgs
 v4r_camera_tracker:
   ubuntu: ros-indigo-v4r-object-tracker
 v4r_incremental_object_learning:
