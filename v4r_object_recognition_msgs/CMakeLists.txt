@@ -51,7 +51,6 @@ find_package(catkin REQUIRED COMPONENTS sensor_msgs std_msgs geometry_msgs v4r_o
   FILES
    retrain_recognizer.srv
    recognize.srv
-   get_configuration.srv
  )
 
 
