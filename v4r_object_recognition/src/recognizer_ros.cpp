@@ -2,6 +2,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <cv_bridge/cv_bridge.h>
 #include <v4r/common/pcl_opencv.h>
+#include <v4r/reconstruction/impl/projectPointToImage.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -148,11 +149,44 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
                     max_v = v;
             }
 
+            cv::rectangle(annotated_img, cv::Point(min_u, min_v), cv::Point(max_u, max_v), cv::Scalar( 0, 255, 255 ), 2);
+
+            // draw coordinate system
+            float size=0.1;
+            float thickness = 4;
+            const Eigen::Matrix3f &R = trans.topLeftCorner<3,3>();
+            const Eigen::Vector3f &t = trans.block<3, 1>(0,3);
+
+            Eigen::Vector3f pt0  = R * Eigen::Vector3f(0,0,0) + t;
+            Eigen::Vector3f pt_x = R * Eigen::Vector3f(size,0,0) + t;
+            Eigen::Vector3f pt_y = R * Eigen::Vector3f(0,size,0) + t;
+            Eigen::Vector3f pt_z = R * Eigen::Vector3f(0,0,size) +t ;
+
+            cv::Point2f im_pt0, im_pt_x, im_pt_y, im_pt_z;
+
+//            if (!dist_coeffs.empty())
+//            {
+//                v4r::projectPointToImage(&pt0 [0], &intrinsic(0), &dist_coeffs(0), &im_pt0.x );
+//                v4r::projectPointToImage(&pt_x[0], &intrinsic(0), &dist_coeffs(0), &im_pt_x.x);
+//                v4r::projectPointToImage(&pt_y[0], &intrinsic(0), &dist_coeffs(0), &im_pt_y.x);
+//                v4r::projectPointToImage(&pt_z[0], &intrinsic(0), &dist_coeffs(0), &im_pt_z.x);
+//            }
+//            else
+            {
+                v4r::projectPointToImage(&pt0 [0], &intrinsic[0], &im_pt0.x );
+                v4r::projectPointToImage(&pt_x[0], &intrinsic[0], &im_pt_x.x);
+                v4r::projectPointToImage(&pt_y[0], &intrinsic[0], &im_pt_y.x);
+                v4r::projectPointToImage(&pt_z[0], &intrinsic[0], &im_pt_z.x);
+            }
+
+            cv::line(annotated_img, im_pt0, im_pt_x, CV_RGB(255,0,0), thickness);
+            cv::line(annotated_img, im_pt0, im_pt_y, CV_RGB(0,255,0), thickness);
+            cv::line(annotated_img, im_pt0, im_pt_z, CV_RGB(0,0,255), thickness);
+
             cv::Point text_start;
             text_start.x = min_u;
             text_start.y = std::max(0, min_v - 10);
             cv::putText(annotated_img, oh->model_id_, text_start, cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255,0,255), 1, CV_AA);
-            cv::rectangle(annotated_img, cv::Point(min_u, min_v), cv::Point(max_u, max_v), cv::Scalar( 0, 255, 255 ), 2);
         }
     }
 
