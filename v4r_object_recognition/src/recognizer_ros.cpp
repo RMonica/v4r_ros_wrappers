@@ -21,23 +21,10 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
     // convert point cloud
     v4r::PCLOpenCVConverter<PointT> img_conv;
     img_conv.setInputCloud(scene_);
-
-    if(!scene_->isOrganized())
-    {
-        ROS_WARN("Input cloud is not organized!");
-        if( !camera_ )
-        {
-            ROS_WARN("Camera is not defined. Defaulting to Kinect parameters!");
-            float focal_length = 525.f;
-            size_t img_width = 640;
-            size_t img_height = 480;
-            float cx = 319.5f;
-            float cy = 239.5f;
-            camera_.reset( new v4r::Camera(focal_length, img_width, img_height, cx, cy) );
-        }
-        img_conv.setCamera( camera_ );
-    }
+    img_conv.setCamera( camera_ );
     cv::Mat annotated_img = img_conv.getRGBImage();
+
+    float intrinsic[9] = { camera_->getFocalLength(), 0, camera_->getCx(), 0, camera_->getFocalLength(), camera_->getCy(), 0.f, 0.f, 1.f};
 
     for(size_t ohg_id=0; ohg_id<object_hypotheses_.size(); ohg_id++)
     {
@@ -50,7 +37,7 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
             ss_tmp.data = oh->model_id_;
             response.ids.push_back(ss_tmp);
 
-            Eigen::Matrix4f trans = oh->transform_;
+            Eigen::Matrix4f trans = oh->pose_refinement_ * oh->transform_;
             geometry_msgs::Transform tt;
             tt.translation.x = trans(0,3);
             tt.translation.y = trans(1,3);
@@ -66,7 +53,7 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
 
             typename pcl::PointCloud<PointT>::ConstPtr model_cloud = mrec_->getModel( oh->model_id_, 5 );
             typename pcl::PointCloud<PointT>::Ptr model_aligned (new pcl::PointCloud<PointT>);
-            pcl::transformPointCloud (*model_cloud, *model_aligned, oh->transform_);
+            pcl::transformPointCloud (*model_cloud, *model_aligned, trans);
             *pRecognizedModels += *model_aligned;
             sensor_msgs::PointCloud2 rec_model;
             pcl::toROSMsg(*model_aligned, rec_model);
@@ -83,7 +70,7 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
             //      confidence = 1.f - vr.getFSVUsedPoints() / static_cast<float>(model_aligned->points.size());
             //      response.confidence.push_back(confidence);
 
-            //centroid and BBox
+            // draw bounding box
             Eigen::Vector4f centroid;
             pcl::compute3DCentroid(*model_aligned, centroid);
             geometry_msgs::Point32 centroid_msg;
@@ -108,17 +95,6 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
             pt.x = max[0]; pt.y = max[1]; pt.z = min[2]; bbox.points[6] = pt;
             pt.x = max[0]; pt.y = max[1]; pt.z = max[2]; bbox.points[7] = pt;
             response.bbox.push_back(bbox);
-
-            if(!camera_)
-            {
-                ROS_WARN("Camera is not defined. Defaulting to Kinect parameters!");
-                float focal_length = 525.f;
-                size_t img_width = 640;
-                size_t img_height = 480;
-                float cx = 319.5f;
-                float cy = 239.5f;
-                camera_.reset( new v4r::Camera(focal_length, img_width, img_height, cx, cy) );
-            }
 
             int min_u, min_v, max_u, max_v;
             min_u = annotated_img.cols;
@@ -203,6 +179,17 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
 
 template<typename PointT>
 bool
+RecognizerROS<PointT>::setCamera (v4r_object_recognition_msgs::set_camera::Request & req,
+                                  v4r_object_recognition_msgs::set_camera::Response & response)
+{
+    v4r::Camera::Ptr cam (new v4r::Camera (req.cam.K[0], req.cam.width, req.cam.height, req.cam.K[2], req.cam.K[5] ));
+    camera_ = cam;
+    mrec_->setCamera( camera_ );
+    (void)response;
+}
+
+template<typename PointT>
+bool
 RecognizerROS<PointT>::recognizeROS(v4r_object_recognition_msgs::recognize::Request &req,
                                     v4r_object_recognition_msgs::recognize::Response &response)
 {
@@ -218,7 +205,7 @@ RecognizerROS<PointT>::recognizeROS(v4r_object_recognition_msgs::recognize::Requ
         for(const v4r::ObjectHypothesis::Ptr &oh : object_hypotheses_[ohg_id].ohs_)
         {
             const std::string &model_id = oh->model_id_;
-            const Eigen::Matrix4f &tf = oh->transform_;
+            const Eigen::Matrix4f &tf = oh->pose_refinement_ * oh->transform_;
 
             if( oh->is_verified_ )
             {
@@ -275,11 +262,13 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
 
     mrec_.reset(new v4r::apps::ObjectRecognizer<PointT>);
     mrec_->initialize(arguments, cfg_dir);
+    camera_ = mrec_->getCamera();
 
     ROS_INFO("Ready to get service calls.");
 
     vis_pc_pub_ = n_->advertise<sensor_msgs::PointCloud2>( "recogniced_object_instances", 1 );
-    recognize_  = n_->advertiseService ("object_recognition", &RecognizerROS::recognizeROS, this);
+    recognize_  = n_->advertiseService ("recognize", &RecognizerROS::recognizeROS, this);
+    recognizer_set_camera_  = n_->advertiseService ("set_camera", &RecognizerROS::setCamera, this);
 
     it_.reset(new image_transport::ImageTransport(*n_));
     image_pub_ = it_->advertise("recogniced_object_instances_img", 1, true);
@@ -293,7 +282,7 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
 int
 main (int argc, char ** argv)
 {
-    ros::init (argc, argv, "recognition_service");
+    ros::init (argc, argv, "object_recognition");
     v4r::RecognizerROS<pcl::PointXYZRGB> m;
     m.initialize (argc, argv);
     ros::spin ();
