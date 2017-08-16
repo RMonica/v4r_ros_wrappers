@@ -1,10 +1,12 @@
 <launch>
 	<arg name="m" default="" doc="Models directory"  />
+	<arg name="cfg" default="/usr/local/share/V4R/cfg" doc="Object Recognition XML configuration directory"  />
 file"/>
 	<arg name="arg" default="-z 3.0 -c 5 -g 0.01" doc="Additional arguments as stated in the library. For help arg:=-h. "/>
 
 	<node pkg="v4r_object_recognition" type="recognition_service" name="recognition_service" output="screen">
 		<param name="models_dir" value="$(arg m)" />
+		<param name="cfg" value="$(arg cfg)" />
 		<param name="arg" value="$(arg arg)" />
 	</node>
 </launch>
