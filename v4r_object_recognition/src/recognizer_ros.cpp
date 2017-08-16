@@ -202,22 +202,29 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
 {
     n_.reset( new ros::NodeHandle ( "~" ) );
 
+    // This should get all console arguments except the ROS ones
     std::vector<std::string> arguments(argv + 1, argv + argc);
+
+    std::string models_dir = "", cfg_dir = "";
+    if( !n_->getParam ( "models_dir", models_dir ) )
+    {
+        ROS_ERROR("Models directory is not set. Must be set with ROS parameter \"models_dir\"!");
+        return false;
+    }
+    else
+    {
+        arguments.push_back("-m");
+        arguments.push_back(models_dir);
+    }
+
+    if( !n_->getParam ( "cfg_dir", cfg_dir ) )
+    {
+        ROS_ERROR("The directory containing the XML config folders for object recognition is not set. Must be set with ROS parameter \"cfg\"!");
+        return false;
+    }
 
     if(arguments.empty())
     {
-        std::string models_dir;
-        if( n_->getParam ( "models_dir", models_dir ) && !models_dir.empty() )
-        {
-            arguments.push_back("-m");
-            arguments.push_back(models_dir);
-        }
-        else
-        {
-            ROS_ERROR("Models directory is not set. Must be set with param \"m\"!");
-            return false;
-        }
-
         std::string additional_arguments;
         if( n_->getParam ( "arg", additional_arguments ) )
         {
@@ -232,9 +239,8 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
         std::cout << arg << " ";
     std::cout << std::endl;
 
-    mrec_param_.load("cfg/multipipeline_config.xml");
-    mrec_.reset(new v4r::apps::ObjectRecognizer<PointT>(mrec_param_));
-    mrec_->initialize(arguments);
+    mrec_.reset(new v4r::apps::ObjectRecognizer<PointT>);
+    mrec_->initialize(arguments, cfg_dir);
 
     ROS_INFO("Ready to get service calls.");
 
