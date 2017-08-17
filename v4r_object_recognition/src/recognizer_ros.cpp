@@ -24,7 +24,7 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
     img_conv.setCamera( camera_ );
     cv::Mat annotated_img = img_conv.getRGBImage();
 
-    float intrinsic[9] = { camera_->getFocalLength(), 0, camera_->getCx(), 0, camera_->getFocalLength(), camera_->getCy(), 0.f, 0.f, 1.f};
+    float intrinsic[9] = { camera_->getFocalLengthX(), 0, camera_->getCx(), 0, camera_->getFocalLengthY(), camera_->getCy(), 0.f, 0.f, 1.f};
 
     for(size_t ohg_id=0; ohg_id<object_hypotheses_.size(); ohg_id++)
     {
@@ -103,11 +103,11 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
 
             for(size_t m_pt_id=0; m_pt_id < model_aligned->points.size(); m_pt_id++)
             {
-                const float x = model_aligned->points[m_pt_id].x;
-                const float y = model_aligned->points[m_pt_id].y;
-                const float z = model_aligned->points[m_pt_id].z;
-                const int u = static_cast<int> ( camera_->getFocalLength() * x / z + camera_->getCx());
-                const int v = static_cast<int> ( camera_->getFocalLength()  * y / z +  camera_->getCy());
+                float x = model_aligned->points[m_pt_id].x;
+                float y = model_aligned->points[m_pt_id].y;
+                float z = model_aligned->points[m_pt_id].z;
+                int u = static_cast<int> ( camera_->getFocalLengthX() * x / z + camera_->getCx());
+                int v = static_cast<int> ( camera_->getFocalLengthY()  * y / z +  camera_->getCy());
 
                 if (u >= annotated_img.cols || v >= annotated_img.rows || u < 0 || v < 0)
                     continue;
@@ -182,7 +182,17 @@ bool
 RecognizerROS<PointT>::setCamera (v4r_object_recognition_msgs::set_camera::Request & req,
                                   v4r_object_recognition_msgs::set_camera::Response & response)
 {
-    v4r::Camera::Ptr cam (new v4r::Camera (req.cam.K[0], req.cam.width, req.cam.height, req.cam.K[2], req.cam.K[5] ));
+    v4r::Camera::Ptr cam;
+    if( req.cam.K[0] < std::numeric_limits<float>::epsilon() )
+    {
+        ROS_WARN("Given camera calibration matrix has focal length 0. Using default settings");
+        cam.reset(new v4r::Camera());
+    }
+    else
+    {
+        cam.reset(new v4r::Camera (req.cam.K[0], req.cam.K[4], req.cam.width, req.cam.height, req.cam.K[2], req.cam.K[5] ));
+    }
+
     camera_ = cam;
     mrec_->setCamera( camera_ );
     (void)response;
