@@ -7,7 +7,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy v4r_object_tracker_msgs
 
 find_package(PCL REQUIRED)
 find_package( OpenCV REQUIRED )
-find_package( V4R REQUIRED )
+find_package( V4R REQUIRED COMPONENTS v4r_tracking v4r_keypoints v4r_io v4r_reconstruction)
 catkin_package(
    INCLUDE_DIRS include
    CATKIN_DEPENDS roscpp rospy v4r_object_tracker_msgs tf2

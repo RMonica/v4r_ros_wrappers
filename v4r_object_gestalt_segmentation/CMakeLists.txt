@@ -5,7 +5,7 @@ find_package(catkin REQUIRED COMPONENTS cv_bridge pcl_conversions pcl_ros roscpp
 
 find_package(PCL REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(V4R REQUIRED)
+find_package(V4R REQUIRED COMPONENTS v4r_attention_segmentation v4r_io)
 
 #find_package(rostest REQUIRED)
 

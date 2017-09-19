@@ -4,7 +4,7 @@ project(v4r_segment_and_classify)
 find_package(catkin REQUIRED COMPONENTS roscpp sensor_msgs std_msgs visualization_msgs pcl_conversions v4r_segmentation_msgs v4r_object_classification_msgs v4r_segmentation v4r_object_classification)
 find_package(PCL REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(V4R REQUIRED)
+find_package(V4R REQUIRED COMPONENTS v4r_io)
 
 catkin_package(
    CATKIN_DEPENDS v4r_segmentation_msgs v4r_object_classification_msgs v4r_object_classification v4r_segmentation pcl_conversions

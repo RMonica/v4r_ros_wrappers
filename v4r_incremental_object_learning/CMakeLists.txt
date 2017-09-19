@@ -5,7 +5,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy v4r_incremental_object_lear
 
 find_package(PCL REQUIRED)
 find_package(OpenCV REQUIRED )
-find_package(V4R REQUIRED)
+find_package(V4R REQUIRED COMPONENTS v4r_object_modelling v4r_common)
 
 catkin_package( CATKIN_DEPENDS roscpp rospy tf v4r_incremental_object_learning_msgs )
 

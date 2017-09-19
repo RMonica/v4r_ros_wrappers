@@ -11,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy v4r_camera_tracker_msgs
 
 find_package(PCL REQUIRED)
 find_package(OpenCV REQUIRED )
-find_package(V4R REQUIRED )
+find_package(V4R REQUIRED COMPONENTS v4r_reconstruction v4r_registration v4r_keypoints)
 find_package(GLEW REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(X11 REQUIRED)

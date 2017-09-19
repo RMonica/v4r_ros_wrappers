@@ -19,7 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(V4R REQUIRED)
+find_package(V4R REQUIRED COMPONENTS v4r_keypoints)
 find_package(PCL REQUIRED)
 
 
