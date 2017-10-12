@@ -15,9 +15,9 @@ Then clone this repository and build it with `catkin_make`. You might get an err
 cd my_catkin_ws/build
 ccmake ../src
 ```
-Locate the option `V4R_DIR` and set it, according to where you build/installed V4R library, e.g.:
+Locate the option `V4R_DIR` and set it, according to where you installed V4R library, e.g.:
 ```
-V4R_DIR   /home/somewhere/v4r/build
+V4R_DIR /home/somewhere/v4r/build/install/share/V4R
 ```
 Then call catkin again, and all should now compile fine.
 
