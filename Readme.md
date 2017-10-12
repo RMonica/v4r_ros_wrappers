@@ -4,11 +4,11 @@ This repository contains ROS wrappers for the V4R library.
 
 ## From Ubuntu Packages
 
-simply install `sudo apt-get install ros-indigo-v4r-ros-wrappers` after enabling the [STRANDS repositories](https://github.com/strands-project-releases/strands-releases/wiki#using-the-strands-repository). 
+Coming soon ...
 
 ## From Source
 
-Make sure you install the V4R library first.
+Make sure you install the V4R library first. See https://rgit.acin.tuwien.ac.at/v4r/v4r for instructions.
 
 Then clone this repository and build it with `catkin_make`. You might get an error regarding V4RModules.cmake. This is easy to fix:
 ```
@@ -28,6 +28,5 @@ A tutorial can be found [here](Tutorial.md).
 
 ## OpenGL not working for SiftGPU
 
-A GPU (best: NVIDIA) is required for many components. For this to work, the user running the software needs to be allowed to access the X server. The easiest (but *very* insecure in a not secured network) way to achieve this is to allow access for all users via `DISPLAY=:0 sudo xhost +`. 
+A GPU (best: NVIDIA) is required for many components. For this to work, the user running the software needs to be allowed to access the X server. The easiest (but *very* insecure in a not secured network) way to achieve this is to allow access for all users via `DISPLAY=:0 sudo xhost +`.
 Alternatively, SIFT can be computed using the non-free library of OpenCV. In this case, link the v4r and v4r\_ros\_wrappers libraries to the right OpenCV library.
-
