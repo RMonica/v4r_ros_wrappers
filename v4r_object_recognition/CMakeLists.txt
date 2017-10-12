@@ -6,7 +6,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy v4r_object_recognition_msgs
 
 find_package( PCL REQUIRED )
 find_package( OpenCV REQUIRED )
-find_package( V4R REQUIRED )
+find_package( V4R REQUIRED COMPONENTS v4r_recognition v4r_apps v4r_reconstruction v4r_io v4r_common)
 
 catkin_package(
    INCLUDE_DIRS include

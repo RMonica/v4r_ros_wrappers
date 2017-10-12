@@ -51,6 +51,7 @@ find_package(catkin REQUIRED COMPONENTS sensor_msgs std_msgs geometry_msgs messa
   FILES
    retrain_recognizer.srv
    recognize.srv
+   set_camera.srv
  )
 
 

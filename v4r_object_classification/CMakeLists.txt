@@ -7,7 +7,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp
 
 find_package(OpenCV REQUIRED)
 find_package(PCL REQUIRED)
-find_package(V4R REQUIRED)
+find_package(V4R REQUIRED COMPONENTS v4r_ml v4r_segmentation v4r_recognition v4r_features v4r_io)
 
 include_directories(${PCL_INCLUDE_DIRS})
 

@@ -20,28 +20,63 @@
 #include <v4r/io/filesystem.h>
 
 #include "v4r_object_recognition_msgs/recognize.h"
+#include "v4r_object_recognition_msgs/set_camera.h"
 
 class ObjectRecognizerDemo
 {
 private:
     typedef pcl::PointXYZRGB PointT;
-    ros::NodeHandle *n_;
-    ros::ServiceClient sv_rec_client_;
+    boost::shared_ptr<ros::NodeHandle> n_;
+    ros::ServiceClient obj_rec_client_, obj_rec_set_camera_client_;
     std::string directory_;
     std::string topic_;
-    bool KINECT_OK_;
+    sensor_msgs::CameraInfo camera_info_;
+
     int input_method_; // defines the test input (0... camera topic, 1... file)
     boost::shared_ptr<image_transport::ImageTransport> it_;
     image_transport::Publisher image_pub_;
+    bool point_cloud_received_;
+    bool camera_info_received_;
+    bool camera_info_set_;
+
+    void camera_info_cb(const sensor_msgs::CameraInfoPtr& msg)
+    {
+        if(!camera_info_received_)
+        {
+            camera_info_ = *msg;
+            std::cout << "Got camera info." << std::endl;
+            camera_info_received_ = true;
+        }
+    }
 
 public:
     ObjectRecognizerDemo()
-        :input_method_(0)
+        :
+          input_method_(0),
+          point_cloud_received_ ( false ),
+          camera_info_received_ (false),
+          camera_info_set_(false)
     {}
 
-    void callSvRecognizerUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
+    void callObjectRecognizerUsingCam(const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
         std::cout << "Received point cloud.\n" << std::endl;
+
+        if(!camera_info_set_)
+        {
+            v4r_object_recognition_msgs::set_camera set_cam_srv;
+            set_cam_srv.request.cam = camera_info_;
+            if (obj_rec_set_camera_client_.call(set_cam_srv))
+            {
+                std::cout << "Set camera info successfully!" << std::endl;
+                camera_info_set_ = true;
+            }
+            else
+            {
+                std::cout << "Failed to set camera info!" << std::endl;
+            }
+        }
+
         v4r_object_recognition_msgs::recognize srv;
         srv.request.cloud = *msg;
 
@@ -52,13 +87,16 @@ public:
         srv.request.transform.translation = t;
         srv.request.transform.rotation = q;
 
-        if (sv_rec_client_.call(srv))
+        if (obj_rec_client_.call(srv))
         {
             std::vector<std_msgs::String>  detected_ids = srv.response.ids;
 
             if(detected_ids.empty())
+            {
                 std::cout << "I did not detected any object from the model database in the current scene." << std::endl;
-            else {
+            }
+            else
+            {
                 std::cout << "I detected: " << std::endl;
                 for(const auto &id:detected_ids)
                     std::cout << "  " << id.data << std::endl;
@@ -68,59 +106,41 @@ public:
         else
         {
             ROS_ERROR("Error calling recognition service. ");
+            camera_info_set_ = false;
             return;
         }
     }
 
     void checkCloudArrive (const sensor_msgs::PointCloud2::ConstPtr& msg)
     {
-        KINECT_OK_ = true;
+        point_cloud_received_ = true;
     }
 
     bool checkKinect ()
     {
         ros::Subscriber sub_pc = n_->subscribe (topic_, 1, &ObjectRecognizerDemo::checkCloudArrive, this);
+
         ros::Rate loop_rate (1);
-        size_t kinect_trials_ = 0;
 
+        std::string camera_info_topic = topic_;
+        boost::replace_last( camera_info_topic, "/points", "/camera_info");
+        std::cout << "Checking if there is an associated camera info topic on " << camera_info_topic << "." << std::endl;
 
-        while (!KINECT_OK_ && ros::ok () && kinect_trials_ < 30)
+        ros::Subscriber cam_info_sub = n_->subscribe(camera_info_topic, 1, &ObjectRecognizerDemo::camera_info_cb, this);
+
+        size_t kinect_trials = 0;
+        while (!point_cloud_received_ && ros::ok () && kinect_trials < 30 && !camera_info_received_)
         {
             std::cout << "Checking kinect status..." << std::endl;
             ros::spinOnce ();
             loop_rate.sleep ();
-            kinect_trials_++;
+            kinect_trials++;
         }
 
-
-        return KINECT_OK_;
-
-//        bool retrain = false;
-//        if(retrain) // this is necessary if the model database of the recognizer has changed
-//        {
-//            ros::ServiceClient retrainClient = n_->serviceClient<v4r_object_recognition_msgs::retrain_recognizer>("/recognition_service/mp_recognition_retrain");
-//            v4r_object_recognition_msgs::retrain_recognizer srv;
-//            for(size_t k=0; k < model_ids_to_be_loaded_.size(); k++)
-//            {
-//                std_msgs::String a;
-//                a.data = model_ids_to_be_loaded_[k];
-//                srv.request.load_ids.push_back(a);
-//            }
-
-//            if(retrainClient.call(srv))
-//            {
-//                std::cout << "called retrain succesfull" << std::endl;
-//            }
-//            else
-//            {
-//                ROS_ERROR("Failed to call /recognition_service/mp_recognition_retrain");
-//                exit(-1);
-//            }
-//        }
-
+        return point_cloud_received_;
     }
 
-    bool callSvRecognizerUsingFiles()
+    bool callObjectRecognizerUsingFiles()
     {
         std::vector<std::string> test_cloud = v4r::io::getFilesInDirectory(directory_, ".*.pcd", false);
         for(size_t i=0; i < test_cloud.size(); i++)
@@ -142,7 +162,7 @@ public:
             srv_rec.request.transform.rotation.z = q.z();
             srv_rec.request.transform.rotation.w = q.w();
 
-            if (sv_rec_client_.call(srv_rec))
+            if (obj_rec_client_.call(srv_rec))
             {
                 std::vector<std_msgs::String>  detected_ids = srv_rec.response.ids;
 
@@ -168,10 +188,10 @@ public:
     bool initialize(int argc, char ** argv)
     {
         ros::init (argc, argv, "ObjectRecognizerDemo");
-        n_ = new ros::NodeHandle ( "~" );
+        n_.reset( new ros::NodeHandle ( "~" ) );
 
-        std::string service_name_sv_rec = "/recognition_service/object_recognition";
-        sv_rec_client_ = n_->serviceClient<v4r_object_recognition_msgs::recognize>(service_name_sv_rec);
+        obj_rec_client_ = n_->serviceClient<v4r_object_recognition_msgs::recognize>("/object_recognition/recognize");
+        obj_rec_set_camera_client_ = n_->serviceClient<v4r_object_recognition_msgs::set_camera>("/object_recognition/set_camera");
         it_.reset(new image_transport::ImageTransport(*n_));
         image_pub_ = it_->advertise("/object_recognition/debug_image", 1, true);
 
@@ -190,7 +210,7 @@ public:
             if ( checkKinect() )
             {
                 std::cout << "Camera (topic: " << topic_ << ") is up and running." << std::endl;
-                ros::Subscriber sub_pc = n_->subscribe (topic_, 1, &ObjectRecognizerDemo::callSvRecognizerUsingCam, this);
+                ros::Subscriber sub_pc = n_->subscribe (topic_, 1, &ObjectRecognizerDemo::callObjectRecognizerUsingCam, this);
                 ros::spin();
             }
             else
@@ -203,7 +223,7 @@ public:
         {
             if(n_->getParam ( "test_dir", directory_ ) && directory_.length())
             {
-                callSvRecognizerUsingFiles();
+                callObjectRecognizerUsingFiles();
             }
             else
             {
