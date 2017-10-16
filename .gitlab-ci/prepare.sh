@@ -7,6 +7,6 @@ rosdep update > /dev/null
 
 setup_apt() {
 echo "deb [arch=amd64] https://rwiki.acin.tuwien.ac.at/apt/v4r-release ${1} main" | sudo tee /etc/apt/sources.list.d/v4r.list
-sudo apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-key 943EB54F
+wget -qO - https://rwiki.acin.tuwien.ac.at/apt/v4r-release/Public.key | sudo apt-key add -
 sudo apt-get update -qq > /dev/null
 }
