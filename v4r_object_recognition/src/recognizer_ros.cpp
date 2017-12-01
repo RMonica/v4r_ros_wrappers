@@ -250,7 +250,7 @@ RecognizerROS<PointT>::initialize (int argc, char ** argv)
 
     if( !n_->getParam ( "cfg_dir", cfg_dir ) )
     {
-        ROS_ERROR("The directory containing the XML config folders for object recognition is not set. Must be set with ROS parameter \"cfg\"!");
+        ROS_ERROR("The directory containing the XML config folders for object recognition is not set. Must be set with ROS parameter \"cfg_dir\"!");
         return false;
     }
 
