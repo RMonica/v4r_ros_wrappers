@@ -220,9 +220,7 @@ RecognizerROS<PointT>::recognizeROS(v4r_object_recognition_msgs::recognize::Requ
             const Eigen::Matrix4f &tf = oh->pose_refinement_ * oh->transform_;
 
             if( oh->is_verified_ )
-            {
-                LOG(INFO) << "********************" << model_id << std::endl << tf << std::endl << std::endl;
-            }
+              ROS_INFO_STREAM("********************" << model_id << std::endl << tf << std::endl);
         }
     }
 
