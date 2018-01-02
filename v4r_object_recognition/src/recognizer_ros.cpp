@@ -57,6 +57,7 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
             *pRecognizedModels += *model_aligned;
             sensor_msgs::PointCloud2 rec_model;
             pcl::toROSMsg(*model_aligned, rec_model);
+            rec_model.header = req.cloud.header;
             response.models_cloud.push_back(rec_model);
 
 
@@ -168,10 +169,11 @@ RecognizerROS<PointT>::respondSrvCall(v4r_object_recognition_msgs::recognize::Re
 
     sensor_msgs::PointCloud2 recognizedModelsRos;
     pcl::toROSMsg (*pRecognizedModels, recognizedModelsRos);
-    recognizedModelsRos.header.frame_id = req.cloud.header.frame_id;
+    recognizedModelsRos.header = req.cloud.header;
     vis_pc_pub_.publish(recognizedModelsRos);
 
     sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", annotated_img).toImageMsg();
+    msg->header = req.cloud.header;
     image_pub_.publish(msg);
 
     return true;
