@@ -79,7 +79,6 @@ SegmenterROS<PointT>::initialize (int argc, char ** argv)
 {
     ros::init (argc, argv, "pcl_segmentation_service");
     n_.reset( new ros::NodeHandle ( "~" ) );
-    google::InitGoogleLogging(argv[0]);
     std::vector<std::string> arguments(argv + 1, argv + argc);
     segmenter_ .initialize(arguments);
 
