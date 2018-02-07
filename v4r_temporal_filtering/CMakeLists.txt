@@ -10,6 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   std_srvs
+  pcl_conversions
+  pcl_ros
   #cv_bridge
 )
 
