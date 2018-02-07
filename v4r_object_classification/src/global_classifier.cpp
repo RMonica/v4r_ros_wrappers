@@ -219,7 +219,9 @@ void ClassifierROS<PointT>::initialize(int argc, char ** argv)
 
 
     // ==== SETUP RECOGNIZER ======
-    typename Source<PointT>::Ptr model_database (new Source<PointT> ( models_dir, true ) );
+    v4r::SourceParameter source_param;
+    typename Source<PointT>::Ptr model_database (new Source<PointT>(source_param));
+    model_database->init( models_dir);
     typename ESFEstimation<PointT>::Ptr estimator (new ESFEstimation<PointT>);
     typename GlobalEstimator<PointT>::Ptr cast_estimator = boost::dynamic_pointer_cast<ESFEstimation<PointT> > (estimator);
 
