@@ -101,7 +101,7 @@ IOL_ROS::initSIFT (int argc, char ** argv)
 //    n_->getParam ( "do_sift_based_camera_pose_estimation", param_.do_sift_based_camera_pose_estimation_);
     n_->getParam ( "transfer_latest_only", param_.transfer_indices_from_latest_frame_only_);
     n_->getParam ( "chop_z", param_.chop_z_);
-    n_->getParam ( "normal_method", param_.normal_method_);
+//    n_->getParam ( "normal_method", param_.normal_method_);
     n_->getParam ( "smooth_clustering", p_param_.smooth_clustering);
     n_->getParam ( "ratio_cluster_obj_supported", param_.ratio_cluster_obj_supported_);
     n_->getParam ( "ratio_cluster_occluded", param_.ratio_cluster_occluded_);
