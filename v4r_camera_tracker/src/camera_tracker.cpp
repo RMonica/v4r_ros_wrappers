@@ -291,7 +291,7 @@ CamTracker::stop (v4r_camera_tracker_msgs::start_tracker::Request & req,
 #else
     camera_topic_subscriber_.shutdown();
 #endif
-    if (!camtracker.empty())
+    if (camtracker)
         camtracker->stopObjectManagement();
     return true;
 }
@@ -474,7 +474,7 @@ CamTracker::initialize (int argc, char ** argv)
 {
     n_.reset( new ros::NodeHandle ( "~" ) );
 
-    int normal_computation_method = v4r::NormalEstimatorType::PCL_INTEGRAL_NORMAL;
+    v4r::NormalEstimatorType normal_computation_method = v4r::NormalEstimatorType::PCL_INTEGRAL_NORMAL;
     std::vector<std::string> params;
     normal_estimator_ = v4r::initNormalEstimator<pcl::PointXYZRGB> ( normal_computation_method, params );
 
