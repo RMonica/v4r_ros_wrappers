@@ -1,67 +1,3 @@
-# Ubuntu 14.04
-ubuntu-trusty:
-  image: ubuntu:trusty
-  variables:
-    CI_ROS_DISTRO: indigo
-    UBUNTU_DISTRO: trusty
-
-  before_script:
-    - rm -rf ../src
-    - sudo apt-get update
-    - sudo apt-get install -qq -y apt-transport-https sed wget unzip > /dev/null
-    - source .gitlab-ci/prepare.sh
-    - sudo ./setup.sh $UBUNTU_DISTRO $CI_ROS_DISTRO > /dev/null
-    - setup_apt ${UBUNTU_DISTRO}
-    - sudo apt-get install -qq -y python-catkin-tools v4r > /dev/null
-    - rosdep update > /dev/null
-    - rosdep install --from-paths . -i -y -r --rosdistro $CI_ROS_DISTRO > /dev/null
-    - add_v4r_yaml
-    
-  stage: build
-  script:
-    - old_dir=`pwd`
-    - mkdir -p /tmp/src
-    - cp  -r * /tmp/src/
-    - cd /tmp/
-    - source /opt/ros/${CI_ROS_DISTRO}/setup.sh
-    - catkin init
-    - catkin build
-    - cd $old_dir
-    - rm -rf /tmp/src
-
-# Ubuntu 14.04 debian package generation
-ubuntu-trusty-build-package:
-  image: ubuntu:trusty
-  variables:
-    CI_ROS_DISTRO: indigo
-    UBUNTU_DISTRO: trusty
-
-  before_script:
-    - sudo apt-get update
-    - sudo apt-get install -qq -y apt-transport-https sed wget unzip > /dev/null
-    - source .gitlab-ci/prepare.sh
-    - sudo ./setup.sh $UBUNTU_DISTRO $CI_ROS_DISTRO > /dev/null
-    - setup_apt ${UBUNTU_DISTRO}
-    - sudo apt-get install -q -y python-bloom devscripts v4r > /dev/null
-    - rosdep update > /dev/null
-    - rosdep install --from-paths . -i -y -r --rosdistro $CI_ROS_DISTRO > /dev/null
-    - add_v4r_yaml
-
-  stage: build
-  script:
-    - ls *
-    - rm -rf build
-    - source .gitlab-ci/release.sh
-    - show_info
-    - mkdir .build
-    - release_package
-    - mv .build build
-
-  # The files which are to be made available in GitLab
-  artifacts:
-    paths:
-      - build/*
-
 # Ubuntu 16.04
 ubuntu-xenial:
   image: ubuntu:xenial
@@ -70,14 +6,15 @@ ubuntu-xenial:
     UBUNTU_DISTRO: xenial
 
   before_script:
+    - echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
     - apt-get update
     - apt-get install -qq -y apt-transport-https sed wget unzip sudo > /dev/null
     - source .gitlab-ci/prepare.sh
     - sudo ./setup.sh $UBUNTU_DISTRO $CI_ROS_DISTRO > /dev/null
     - setup_apt ${UBUNTU_DISTRO}
     - sudo apt-get install -qq -y python-catkin-tools v4r > /dev/null
-    - rosdep update > /dev/null
-    - rosdep install --from-paths . -i -y -r --rosdistro $CI_ROS_DISTRO > /dev/null
+    - rosdep update 2> /dev/null
+    - rosdep install --from-paths . -i -y -r --rosdistro $CI_ROS_DISTRO 2> /dev/null
     - add_v4r_yaml
     
   stage: build
@@ -101,6 +38,7 @@ ubuntu-xenial-build-package:
     UBUNTU_DISTRO: xenial
 
   before_script:
+    - echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
     - echo $CI_ROS_DISTRO
     - echo ${CI_ROS_DISTRO}
     - apt-get update
@@ -110,8 +48,8 @@ ubuntu-xenial-build-package:
     - setup_apt ${UBUNTU_DISTRO}
     - sudo apt-get install -q -y python-bloom devscripts v4r > /dev/null
     - apt-get install -f -y > /dev/null
-    - rosdep update > /dev/null
-    - rosdep install --from-paths . -i -y -r --rosdistro $CI_ROS_DISTRO > /dev/null
+    - rosdep update 2> /dev/null
+    - rosdep install --from-paths . -i -y -r --rosdistro $CI_ROS_DISTRO 2> /dev/null
     - add_v4r_yaml
 
   stage: build
