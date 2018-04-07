@@ -196,7 +196,7 @@ RecognizerROS<PointT>::setCamera (v4r_object_recognition_msgs::set_camera::Reque
     }
 
     camera_ = cam;
-    mrec_->setCamera( camera_ );
+    mrec_->setCamera( cam );
     (void)response;
 }
 
