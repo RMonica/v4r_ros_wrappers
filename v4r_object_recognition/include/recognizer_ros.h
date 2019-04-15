@@ -21,7 +21,7 @@ private:
     std::vector< ObjectHypothesesGroup > object_hypotheses_; ///< recognized objects
     typename boost::shared_ptr<v4r::apps::ObjectRecognizer<PointT> > mrec_; ///< recognizer
     typename pcl::PointCloud<PointT>::Ptr scene_; ///< input cloud
-    Camera::ConstPtr camera_; ///< camera (if cloud is not organized)
+    Intrinsics camera_; ///< camera (if cloud is not organized)
 
     bool respondSrvCall(v4r_object_recognition_msgs::recognize::Request &req, v4r_object_recognition_msgs::recognize::Response &response) const;
 

@@ -223,7 +223,7 @@ void ClassifierROS<PointT>::initialize(int argc, char ** argv)
     typename Source<PointT>::Ptr model_database (new Source<PointT>(source_param));
     model_database->init( models_dir);
     typename ESFEstimation<PointT>::Ptr estimator (new ESFEstimation<PointT>);
-    typename GlobalEstimator<PointT>::Ptr cast_estimator = boost::dynamic_pointer_cast<ESFEstimation<PointT> > (estimator);
+    typename GlobalEstimator<PointT>::Ptr cast_estimator = std::dynamic_pointer_cast<ESFEstimation<PointT> > (estimator);
 
     rec_.reset(new GlobalRecognizer<PointT>);
     rec_->setModelDatabase( model_database );
